@@ -1,4 +1,4 @@
-# eso-phresh
+# Ergo Dashboard
 
 Back-end startup
 1. run `openssl rand -hex 32` and use that as the secret key in the .env.template file, then rename that file to .env
