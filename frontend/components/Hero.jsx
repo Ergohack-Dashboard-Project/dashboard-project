@@ -5,20 +5,18 @@ const Hero = ({ title, subtitle }) => {
     return ( 
 
         <Grid container spacing={1}>
-                <Grid item xs={7}>
+                <Grid item xs={12} sm={7}>
                     <Typography
                         variant="h1"
                         sx={{
                         color: "primary.main",
-                        fontWeight: 400,
                         }}
                     >
                         {title}
                     </Typography>
                     <Typography
                         component="p"
-                        variant="h3"
-                        align="center"
+                        variant="h6"
                         color="secondary.main"
                         sx={{
                         mb: 10,
@@ -27,7 +25,7 @@ const Hero = ({ title, subtitle }) => {
                         {subtitle}
                     </Typography>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={12} sm={5}>
 
                 </Grid>
         </Grid>
