@@ -66,7 +66,7 @@ const SideDrawer = ({ navLinks }) => {
         onClose={toggleDrawer("right", false)}
         sx={{
           ".MuiDrawer-paper": {
-            bgcolor: "primary.main",
+            
           },
         }}
       >
