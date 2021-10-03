@@ -13,6 +13,18 @@ let theme = createTheme({
         light: 'rgb(82, 82, 90)',
         main: 'rgb(162, 162, 168)',
     },
+    background: {
+        light: '#ffffff',
+        main: 'rgb(29, 29, 32)',
+    },
+    action: {
+
+        hover: '#ffffff',
+
+      light: {
+
+      },
+    },
   },
   typography: {
     fontFamily: [
