@@ -9,5 +9,5 @@ Back-end startup
 
 Front-end startup
 1. in frontend folder run `npm install`
-2. then run `yarn start`
+2. then run `yarn dev`
 3. You should now be able to view the frontend at localhost:3000
