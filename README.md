@@ -9,5 +9,12 @@ Back-end startup
 
 Front-end startup
 1. in frontend folder run `npm install`
-2. then run `yarn dev`
+2. then run `yarn start`
 3. You should now be able to view the frontend at localhost:3000
+
+
+# Quickstart
+> $ docker-compose up<br>
+<br>
+> open browser to http://localhost:5050 and login with pgadmin email/pass<br>
+> .. if servers not saved, setup new server to docker compose container name (i.e. db) using postgres user/pass
