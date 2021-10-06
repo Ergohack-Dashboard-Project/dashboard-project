@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-
 from app.api.routes.users import router as users_router
 from app.api.routes.profiles import router as profiles_router
 from app.api.routes.ergo import router as ergo_router

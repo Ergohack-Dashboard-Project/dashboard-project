@@ -5,6 +5,8 @@ from fastapi import Depends, APIRouter, HTTPException, Path, Body, status
 from fastapi.security import OAuth2PasswordRequestForm
 from app.services import auth_service
 from app.models.asset import AssetPublic
+from app.api.dependencies.auth import get_current_active_user
+from app.models.user import UserInDB
 
 from starlette.status import (
     HTTP_200_OK,
@@ -50,7 +52,8 @@ async def get_asset_balance_from_address(
 
 @router.get("/{blockchain}/price", name="coin:get-asset-price")
 async def get_asset_current_price(
-    blockchain: str = None
+    blockchain: str = None,
+    current_user: UserInDB = Depends(get_current_active_user),
 ) -> None:
     res = requests.get(f'{coingecko_url}/simple/price?vs_currencies={currency}&ids={blockchain}')
 
