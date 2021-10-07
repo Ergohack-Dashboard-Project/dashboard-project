@@ -1,24 +1,21 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
-import { rgb } from 'color-convert';
 
 // Create a theme instance.
 let theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      light: 'rgb(29, 29, 32)',
       main: 'rgb(57, 186, 181)',
     },
     secondary: {
-      light: 'rgb(82, 82, 90)',
       main: 'rgb(162, 162, 168)',
     },
     background: {
-      light: '#ffffff',
-      main: 'rgb(29, 29, 32)',
+      default: 'rgb( 29, 29, 32 )',
     },
     text: {
-      // primary: 'rgb(224,224,225)',
+      primary: 'rgb(244, 244, 245)',
+      secondary: 'rgb(162, 162, 168)',
     },
     action: {
       hover: '#ffffff',

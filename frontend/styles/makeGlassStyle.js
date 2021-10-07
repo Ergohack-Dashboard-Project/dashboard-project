@@ -10,7 +10,7 @@ const makeGlassBg = (theme) => ({
   background:
     theme.palette.mode === 'dark'
       ? 'rgba( 255, 255, 255, 0.05)'
-      : 'rgba( 29, 29, 32, 0.5 )',
+      : 'rgba( 29, 29, 32 )',
 });
 
 export default makeGlassBg;

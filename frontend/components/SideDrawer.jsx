@@ -36,7 +36,6 @@ const SideDrawer = ({ navLinks }) => {
           sx={{
             ml: 5,
             my: 2,
-            textTransform: `uppercase`,
           }}
         >
           <MuiNextLink sx={{ color: "common.white" }} href={path}>
