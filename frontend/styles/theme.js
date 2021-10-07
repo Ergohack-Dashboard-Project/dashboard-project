@@ -28,6 +28,9 @@ let theme = createTheme({
     h1: {
       fontWeight: '800',
     },
+    h4: {
+      fontWeight: '800',
+    }
   },
 });
 

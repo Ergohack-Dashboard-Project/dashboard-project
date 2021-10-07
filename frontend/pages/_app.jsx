@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import createEmotionCache from '../styles/createEmotionCache';
+import { wrapper } from '../redux/store';
 
 import '/styles/globals.css';
 import theme from '../styles/theme';
@@ -11,7 +12,7 @@ import Layout from '@components/layout/Layout';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
-export default function MyApp(props) {
+function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
@@ -30,3 +31,5 @@ export default function MyApp(props) {
     </CacheProvider>
   );
 }
+
+export default wrapper.withRedux(MyApp);
