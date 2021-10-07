@@ -1,9 +1,11 @@
-import Header from '@components/Header';
-import BottomNav from '@components/navigation/BottomNav';
 import { useMediaQuery } from '@mui/material';
 import { Box, styled, useTheme } from '@mui/system';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import Header from '@components/Header';
+import BottomNav from '@components/navigation/BottomNav';
+import Aurora from '@components/stylistic/Aurora';
 import makeStyledScrollbar from 'styles/makeStyledScrollbar';
 import pageTransitions from './pageTransitions';
 
@@ -17,7 +19,7 @@ const Root = styled('div')(({ theme }) => ({
   },
 }));
 
-const childrenWrapper = {
+const pageWrapper = {
   minHeight: '20vh',
   marginBottom: 6,
 };
@@ -29,6 +31,11 @@ const Layout = ({ children }) => {
   return (
     <Root>
       <Header />
+
+      <AnimatePresence exitBeforeEnter>
+        <Aurora key={router.route} />
+      </AnimatePresence>
+
       <AnimatePresence exitBeforeEnter>
         {/* Page transition animations */}
         <Box
@@ -38,7 +45,7 @@ const Layout = ({ children }) => {
           initial='hidden'
           animate='visible'
           exit='hidden'
-          sx={childrenWrapper}
+          sx={pageWrapper}
         >
           {children}
         </Box>

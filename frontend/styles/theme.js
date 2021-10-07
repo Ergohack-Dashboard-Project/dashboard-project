@@ -1,36 +1,33 @@
-import { createTheme, responsiveFontSizes } from "@mui/material/styles";
-import { rgb } from "color-convert";
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+import { rgb } from 'color-convert';
 
 // Create a theme instance.
 let theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-        light: 'rgb(29, 29, 32)',
-        main: 'rgb(244, 244, 245)',
+      light: 'rgb(29, 29, 32)',
+      main: 'rgb(57, 186, 181)',
     },
     secondary: {
-        light: 'rgb(82, 82, 90)',
-        main: 'rgb(162, 162, 168)',
+      light: 'rgb(82, 82, 90)',
+      main: 'rgb(162, 162, 168)',
     },
     background: {
-        light: '#ffffff',
-        main: 'rgb(29, 29, 32)',
+      light: '#ffffff',
+      main: 'rgb(29, 29, 32)',
+    },
+    text: {
+      // primary: 'rgb(224,224,225)',
     },
     action: {
+      hover: '#ffffff',
 
-        hover: '#ffffff',
-
-      light: {
-
-      },
+      light: {},
     },
   },
   typography: {
-    fontFamily: [
-        'Inter', 
-        'sans-serif',
-    ].join(','),
+    fontFamily: ['Inter', 'sans-serif'].join(','),
     h1: {
       fontWeight: '800',
     },
