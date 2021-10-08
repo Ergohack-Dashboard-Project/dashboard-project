@@ -9,6 +9,7 @@ import {
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 import router, { useRouter } from 'next/router';
 import { useState } from 'react';
+import SideDrawer from '../SideDrawer';
 
 // TODO: Change these icons for more appropriate ones if available
 const navLinks = [
@@ -34,10 +35,12 @@ const navLinks = [
   },
   {
     label: 'More',
-    link: 'sidemenu',
+    link: '',
     icon: <MenuOutlined />,
   },
 ];
+
+
 
 // Styles
 const root = { position: 'fixed', bottom: -1, width: '100vw' };

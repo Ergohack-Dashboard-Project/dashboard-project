@@ -1,6 +1,6 @@
 const makeStyledScrollbar = (theme, barWidth = '10px') => ({
   '&::-webkit-scrollbar-track': {
-    background: theme.palette.background.paper,
+    background: 'transparent',
   },
   '&::-webkit-scrollbar': {
     width: barWidth,
