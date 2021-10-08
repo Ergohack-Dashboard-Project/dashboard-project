@@ -10,10 +10,12 @@ class AssetBase(CoreModel):
      - token
     """
 
-    type: str
-    value: float
-    born: float # datetime.timestamp(datetime.utcnow())
-    extra: Optional[dict]
+    # type: Optional[str]
+    # value: Optional[float]
+    # born: Optional[float] # datetime.timestamp(datetime.utcnow())
+    # extra: Optional[dict]
+    address: str    
+    balance: dict = {}
 
 class AssetPublic(AssetBase):
     pass

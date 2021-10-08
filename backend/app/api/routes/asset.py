@@ -68,23 +68,50 @@ async def get_all_assets(
 @router.get("/balance/{address}", response_model=AssetPublic, name="ergo:get-balance")
 async def get_asset_balance_from_address(
     address: str = Path(..., min_length=40, regex="^[a-zA-Z0-9_-]+$"), # i.e. 9gDRYMhFwz2FjAcyYxgSqbwTmRzbkkx6vMujcRPLJWuxWd57q1S
-) -> None:
+) -> None: 
 
     # get balance from ergo explorer api
     logging.debug(f'find balance for [blockchain], address: {address}...')
     res = requests.get(f'{ergo_platform_url}/addresses/{address}/balance/total')    
 
     # handle invalid address or other error
-    if res.status_code != 200:
-        # raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Something went wrong.")
-        balance = {}
-    else:
+    wallet_assets = {}
+    balance = {}
+    if res.status_code == 200:
         balance = res.json()
+    # else:
+        # raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Something went wrong.")
     logging.info(f'Balance for ergo: {balance}')
+
+    # normalize result
+    wallet_assets["ERG"] = {
+        "blockchain": "ergo",
+        "balance": balance['confirmed']['nanoErgs']/1000000000.0, # satoshis/kushtis
+        "unconfirmed": balance['unconfirmed']['nanoErgs']/1000000000.0, # may not be available for all blockchains
+        "tokens": balance['confirmed']['tokens'], # array
+    }
+    # unconfirmed?
+
+    # handle SigUSD and SigRSV
+    for token in balance['confirmed']['tokens']:
+        if token['name'] == 'SigUSD': # TokenId: 22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9
+            wallet_assets['SigUSD'] = {
+                "blockchain": "ergo",
+                "balance": token['amount'], # satoshis/kushtis
+                "unconfirmed": 0.0, # may not be available for all blockchains
+                "tokens": None, # array
+            }
+        if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
+            wallet_assets['SigRSV'] = {
+                "blockchain": "ergo",
+                "balance": token['amount'], # satoshis/kushtis
+                "unconfirmed": 0.0, # may not be available for all blockchains
+                "tokens": None, # array
+            }
 
     return {
         "address": address,
-        "balance": balance,
+        "balance": wallet_assets,
     }
 
 @router.get("/{blockchain}/price", name="coin:get-asset-price")
