@@ -34,7 +34,7 @@ const Root = styled('div')(({ theme }) => ({
 
 const PageWrapper = styled('div')(({ theme }) => ({
   minHeight: '20vh',
-  marginBottom: 6,
+  paddingBottom: theme.spacing(15),
   width: '100vw',
   height: '100vh',
   overflowY: 'scroll',
