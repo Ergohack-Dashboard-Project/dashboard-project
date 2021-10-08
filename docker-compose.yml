@@ -3,98 +3,26 @@ version: '3.7'
 services:
   server:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
-    container_name: server
+      context: ./backend
+      dockerfile: Dockerfile
     volumes:
-      - ./backend:/app
+      - ./backend/:/backend/
+    command: uvicorn app.api.server:app --reload --workers 1 --host 0.0.0.0 --port 8000
     env_file:
-      - .env
+      - ./backend/.env
     ports:
       - 8000:8000
     depends_on:
       - db
-    command: uvicorn app.api.server:app --reload --workers 1 --reload-dir /app --host 0.0.0.0 --port 8000
-
-  ui:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: ui
-    volumes:
-      - ./frontend:/app
-    env_file:
-      - .env
-    ports:
-      - 3000:3000
-    # entrypoint: nodemon ./forever.js
-    entrypoint: nodemon -L --exec yarn dev
 
   db:
     image: postgres:13-alpine
-    container_name: postgres
-    restart: always
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_USER=ergohack
-      - POSTGRES_PASSWORD=ergohack # 3rg0h@cK!
-      - POSTGRES_DB=test # prod
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./backend/.env
     ports:
       - 5432:5432
 
-  redis:
-    image: redis
-    container_name: redis
-    volumes:
-      - 'redis_data:/data' # redis persistence
-    ports:
-      - '6379:6379'
-    entrypoint: redis-server --appendonly yes
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    depends_on:
-      - db
-    environment:
-      - PGADMIN_LISTEN_PORT=5050
-      - PGADMIN_DEFAULT_EMAIL=ergo@hack.com
-      - PGADMIN_DEFAULT_PASSWORD=ergohack # 3rg0h@cK!
-    ports:
-      - '5050:5050'
-
-#   ergonode:
-#     image: openjdk
-#     container_name: ergonode
-#     volumes: 
-#       - './node/:/var/ergo'
-#       - './testnet/.ergo:/var/ergo/.ergo'
-#     ports:
-#       - '9053:9053' # rempap for config files
-#     depends_on: 
-#       - redis
-#     working_dir: /var/ergo
-#     entrypoint: java -jar ergo-4.0.13.jar --testnet -c testnet.conf
-# 
-#   ergostratum:
-#     container_name: ergostratum
-#     build: 
-#       context: .
-#       dockerfile: Dockerfile.stratum
-#     volumes: 
-#       - './stratum:/var/ergo'
-#     ports: 
-#       - "8008:8008" # stratum
-#     environment:
-#       - NODEHOST=ergonode
-#       - NODEPORT=9053
-#     depends_on: 
-#       - ergonode
-#     entrypoint: nodemon ./tulip.js -e js # restart on js file changes
-
 volumes:
-  postgres_data:
-  redis_data:
-    
+    postgres_data:
