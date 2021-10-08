@@ -39,7 +39,7 @@ const Header = () => {
               maxWidth='lg'
               sx={{ display: `flex`, justifyContent: `space-between` }}
             >
-              <IconButton edge='start' aria-label='home'>
+              {/* <IconButton edge='start' aria-label='home'>
                 <MuiNextLink activeClassName='active' href='/'>
                   <Home
                     sx={{
@@ -48,7 +48,7 @@ const Header = () => {
                     fontSize='large'
                   />
                 </MuiNextLink>
-              </IconButton>
+              </IconButton> */}
               <Navbar navLinks={navLinks} />
               {!isMobile && <SideDrawer navLinks={navLinks} />}
             </Container>

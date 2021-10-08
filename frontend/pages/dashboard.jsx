@@ -1,5 +1,6 @@
 import Container from '@mui/material/Container';
 import { styled } from '@mui/system';
+import React, { useState, useEffect } from 'react';
 import makeGlassBg from 'styles/makeGlassStyle';
 import { VictoryChart, VictoryContainer, VictoryPie } from 'victory';
 
@@ -48,7 +49,7 @@ const rawData =
     }
   };
 
-const tokenDataArray = rawData => {
+const tokenDataArray = data => {
   let tokenObject = rawData.balance.confirmed.tokens;
   const keys = Object.keys(tokenObject);
   const res = [];
@@ -62,24 +63,42 @@ const tokenDataArray = rawData => {
   }
   const ergoValue = { 
     x: "Ergo", 
-    y: (rawData.balance.confirmed.price * ( rawData.balance.confirmed.nanoErgs * 0.000000001))
+    y: (data.balance.confirmed.price * ( data.balance.confirmed.nanoErgs * 0.000000001))
   };
   res.unshift(ergoValue);
   return res;
 };
 
-let victoryData = tokenDataArray(rawData);
+const wantedHoldingData = tokenDataArray(rawData);
+const portfolioValue = wantedHoldingData.map(item => item.y).reduce((a, b) => a + b);
+
+
+const defaultHoldingData = wantedHoldingData.map(item => {
+  const container = {};
+  container.x = item.x;
+  container.y = 0;
+  return container;
+});
+defaultHoldingData[defaultHoldingData.length - 1].y = portfolioValue;
 
 const Dashboard = () => {
 
+  const [holdingData, setHoldingData] = useState(defaultHoldingData);
+
+  useEffect(() => {
+    setHoldingData(wantedHoldingData); // Setting the data that we want to display
+  }, []);
 
   return (
     <Container  maxWidth='lg'>    
       <h1>This is the dashboard</h1>
       <GlassContainer>
+        <h3>Wallet Holdings</h3>
           <VictoryPie
             innerRadius={100}
-            data={victoryData}
+            data={holdingData}
+            colorScale="cool"
+            style={{ labels: { fill: "white" } }}
             containerComponent={
               <VictoryContainer
                 style={{
@@ -87,6 +106,7 @@ const Dashboard = () => {
                 }}
               />
             }
+            animate={{ easing: 'exp' }}
           />
       </GlassContainer>
     </Container>
