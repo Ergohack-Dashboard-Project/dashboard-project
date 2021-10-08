@@ -12,7 +12,7 @@ const Blur = styled('svg')(({ theme }) => ({
 
 const Aurora = () => {
   const auroraVariants = {
-/*     hidden: {
+    hidden: {
       x: 500,
       transition: {
         //   duration: 0.7,
@@ -21,7 +21,7 @@ const Aurora = () => {
         when: 'afterChildren',
         staggerChildren: 0.1,
       },
-    }, */
+    },
     visible: {
       x: 0,
       transition: {
@@ -33,13 +33,13 @@ const Aurora = () => {
   };
 
   const sphereVariants = {
-/*     hidden: {
+    hidden: {
       x: '25vw',
       transition: {
         type: 'spring',
         stiffness: 100,
       },
-    }, */
+    },
     visible: {
       x: 0,
       transition: {
@@ -50,19 +50,12 @@ const Aurora = () => {
   };
 
   return (
-/*     <Blur
+    <Blur
       variants={auroraVariants}
-      initial='visible'
+      initial='hidden'
       animate='visible'
       exit='hidden'
       as={motion.svg}
-      width='100vw'
-      height='100vh'
-      viewBox='0 0 372 483'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
-    > */
-    <Blur
       width='100vw'
       height='100vh'
       viewBox='0 0 372 483'
@@ -92,12 +85,7 @@ const Aurora = () => {
           colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
-          <feBlend
-            mode='normal'
-            in='SourceGraphic'
-            in2='BackgroundImageFix'
-            result='shape'
-          />
+          <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
           <feGaussianBlur stdDeviation='35.5' result='effect1_foregroundBlur' />
         </filter>
         <filter
@@ -110,12 +98,7 @@ const Aurora = () => {
           colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
-          <feBlend
-            mode='normal'
-            in='SourceGraphic'
-            in2='BackgroundImageFix'
-            result='shape'
-          />
+          <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
           <feGaussianBlur stdDeviation='40' result='effect1_foregroundBlur' />
         </filter>
         <filter
@@ -128,12 +111,7 @@ const Aurora = () => {
           colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
-          <feBlend
-            mode='normal'
-            in='SourceGraphic'
-            in2='BackgroundImageFix'
-            result='shape'
-          />
+          <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
           <feGaussianBlur stdDeviation='35.5' result='effect1_foregroundBlur' />
         </filter>
         <filter
@@ -146,12 +124,7 @@ const Aurora = () => {
           colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
-          <feBlend
-            mode='normal'
-            in='SourceGraphic'
-            in2='BackgroundImageFix'
-            result='shape'
-          />
+          <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
           <feGaussianBlur stdDeviation='24.5' result='effect1_foregroundBlur' />
         </filter>
         <radialGradient
