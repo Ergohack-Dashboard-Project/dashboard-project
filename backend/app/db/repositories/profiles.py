@@ -11,6 +11,7 @@ CREATE_PROFILE_FOR_USER_QUERY = """
 
 GET_PROFILE_BY_USER_ID_QUERY = """
     SELECT id, full_name, phone_number, bio, image, user_id, created_at, updated_at
+        , addresses
     FROM profiles
     WHERE user_id = :user_id;
 """
@@ -26,6 +27,7 @@ GET_PROFILE_BY_USERNAME_QUERY = """
            user_id,
            p.created_at,
            p.updated_at
+        , p.addresses
     FROM profiles p
         INNER JOIN users u
         ON p.user_id = u.id
