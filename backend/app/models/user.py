@@ -16,7 +16,7 @@ class UserBase(CoreModel):
     username: Optional[str]
     email_verified: bool = False
     is_active: bool = True
-    is_superuser: bool = False 
+    is_superuser: bool = False
 
 
 class UserCreate(CoreModel):

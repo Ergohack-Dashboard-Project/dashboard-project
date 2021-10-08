@@ -1,10 +1,8 @@
-import requests 
-import json
-
 from fastapi import Depends, APIRouter, HTTPException, Path, Body, status
 from fastapi.security import OAuth2PasswordRequestForm
 from app.services import auth_service
 from app.models.ergo import ErgoPublic
+from requests import get
 
 from starlette.status import (
     HTTP_200_OK,
@@ -15,8 +13,7 @@ from starlette.status import (
     HTTP_422_UNPROCESSABLE_ENTITY,
 )
 
-ergo_platform_url: str = 'https://api.ergoplatform.com/api/v1/addresses/'
-oracle_pool_url: str = 'https://erg-oracle-ergusd.spirepools.com/frontendData'
+ergoplatform_url: str = 'https://api.ergoplatform.com/api/v1/addresses/'
 router = APIRouter()
 
 @router.get("/balance/{address}", response_model=ErgoPublic, name="ergo:get-balance")
@@ -25,7 +22,7 @@ async def get_balance_from_address(
 ) -> None:
 
     # get balance from ergo explorer api
-    res = requests.get(f'{ergo_platform_url}{address}/balance/total')
+    res = get(f'{ergoplatform_url}{address}/balance/total')
 
     # handle invalid address or other error
     if res.status_code != 200:
@@ -37,23 +34,4 @@ async def get_balance_from_address(
     return {
         "address": address,
         "balance": balance 
-    }
-
-@router.get("/price", name="ergo:get-price")
-async def get_current_price() -> None:
-
-    res = requests.get(f'{oracle_pool_url}')
-
-    # handle invalid address or other error
-    if res.status_code != 200:
-        # raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Something went wrong.")
-        price = {}
-    else:
-        try:
-            price = json.loads(res.json())['latest_price']
-        except:
-            price = {}
-
-    return {
-        "price": price
     }

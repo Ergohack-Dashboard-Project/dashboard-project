@@ -1,17 +1,16 @@
 from fastapi import Depends, APIRouter, HTTPException, Path, Body, status
+
 from app.api.dependencies.auth import get_current_active_user
 from app.api.dependencies.database import get_repository
+
 from app.models.user import UserCreate, UserUpdate, UserInDB, UserPublic
 from app.models.profile import ProfileUpdate, ProfilePublic
-from app.models.asset import AssetPublic
+
 from app.db.repositories.profiles import ProfilesRepository
 
-import logging
-logging.basicConfig(format="%(asctime)s %(levelname)s %(threadName)s %(name)s %(message)s", datefmt='%m-%d %H:%M', level=logging.DEBUG)
 
 router = APIRouter()
 
-### ROUTES
 
 @router.get("/{username}/", response_model=ProfilePublic, name="profiles:get-profile-by-username")
 async def get_profile_by_username(
