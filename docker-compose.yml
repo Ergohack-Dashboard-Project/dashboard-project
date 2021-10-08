@@ -43,16 +43,7 @@ services:
       - POSTGRES_DB=test # prod
     ports:
       - 5432:5432
-
-  redis:
-    image: redis
-    container_name: redis
-    volumes:
-      - 'redis_data:/data' # redis persistence
-    ports:
-      - '6379:6379'
-    entrypoint: redis-server --appendonly yes
-
+      
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin

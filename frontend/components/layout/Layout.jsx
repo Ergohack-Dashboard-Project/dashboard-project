@@ -8,7 +8,6 @@ import BottomNav from '@components/navigation/BottomNav';
 import Aurora from '@components/stylistic/Aurora';
 import makeStyledScrollbar from 'styles/makeStyledScrollbar';
 import pageTransitions from './pageTransitions';
-import Fade from '@mui/material/Fade';
 
 const Root = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -39,7 +38,7 @@ const PageWrapper = styled('div')(({ theme }) => ({
   height: '100vh',
   overflowY: 'scroll',
   overflowX: 'hidden',
-  [theme.breakpoints.up('lg')]: {
+  [theme.breakpoints.up('md')]: {
     ...makeStyledScrollbar(theme),
   },
 }));
@@ -50,8 +49,6 @@ const Layout = ({ children }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <Root>
-      <Header />
-
       <AnimatePresence exitBeforeEnter>
         <Aurora key={router.route} />
       </AnimatePresence>
@@ -66,6 +63,7 @@ const Layout = ({ children }) => {
           animate='visible'
           exit='hidden'
         >
+          <Header />
           {children}
         </PageWrapper>
       </AnimatePresence>
