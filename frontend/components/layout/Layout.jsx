@@ -68,9 +68,9 @@ const Layout = ({ children }) => {
           exit='hidden'
         >
           <Header />
+          <Container maxWidth='lg'>{children}</Container>
           <Container maxWidth='lg'>
-          {children}
-          <Footer />
+            <Footer />
           </Container>
         </PageWrapper>
       </AnimatePresence>
