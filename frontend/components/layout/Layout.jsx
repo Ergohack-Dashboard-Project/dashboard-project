@@ -68,7 +68,9 @@ const Layout = ({ children }) => {
           exit='hidden'
         >
           <Header />
-          <Container maxWidth='lg'>{children}</Container>
+          <Container maxWidth='lg' sx={{ minHeight: '80vh' }}>
+            {children}
+          </Container>
           <Container maxWidth='lg'>
             <Footer />
           </Container>
