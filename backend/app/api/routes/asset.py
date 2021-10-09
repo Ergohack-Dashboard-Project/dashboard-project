@@ -162,7 +162,7 @@ async def get_asset_current_price(
 
     # SigUSD/SigRSV
     if coin in ('sigusd', 'sigrsv'):
-        res = (await requests.get(ergo_watch_api)).json()
+        res = requests.get(ergo_watch_api).json()
         if res:
             if coin == 'sigusd':
                 price = 1/(res['peg_rate_nano']/nerg2erg)
