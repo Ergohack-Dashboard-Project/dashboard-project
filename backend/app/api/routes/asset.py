@@ -1,15 +1,14 @@
 import requests 
 import json
 
-from fastapi import Depends, APIRouter, HTTPException, Path, Body, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import Depends, APIRouter, Path #, Body, status, HTTPException
+# from fastapi.security import OAuth2PasswordRequestForm
 from app.services import auth_service
 from app.models.asset import AssetPublic
 from app.api.dependencies.database import get_repository
-from app.api.dependencies.auth import get_current_active_user
-from app.models.user import UserInDB
+# from app.api.dependencies.auth import get_current_active_user
+# from app.models.user import UserInDB
 from app.db.repositories.profiles import ProfilesRepository
-
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -19,14 +18,39 @@ from starlette.status import (
     HTTP_422_UNPROCESSABLE_ENTITY,
 )
 
+"""
+Asset API
+---------
+Created: vikingphoenixconsulting@gmail.com
+On: 20211009
+Purpose: Returns coin and token values by user, coin or wallet.
+
+Notes: 
+. Developed for ErgoHack II, October 2021
+. TODO: intended to use reducers/redux model to improve testability/stability
+. Replace APIs with database calls once data is populated (need supporting import scripts to maintain)
+  - if keeping API calls, replace requests with async (i.e. httpx or aiohttp) to avoid blocking (requests is synchronous)
+
+Examples:
+> http://localhost:8000/api/asset/user/hello
+> http://localhost:8000/api/asset/price/cardano
+> http://localhost:8000/api/asset/price/sigusd
+> http://localhost:8000/api/asset/balance/9iD7JfYYemJgVz7nTGg9gaHuWg7hBbHo2kxrrJawyz4BD1r9fLS
+
+"""
+
+### LOGGING
 import logging
 logging.basicConfig(format="%(asctime)s %(levelname)s %(threadName)s %(name)s %(message)s", datefmt='%m-%d %H:%M', level=logging.DEBUG)
 
-# TODO: move to user
-currency = 'usd'
-
 ### INIT
+currency = 'usd' # TODO: store with user
+total_sigrsv = 100000000000.01 # initial amount SigRSV
+default_rsv_price = 1000000 # lower bound/default SigRSV value
+nerg2erg = 1000000000.0 # 1e9 satoshis/kushtis in 1 erg
+
 ergo_platform_url: str = 'https://api.ergoplatform.com/api/v1'
+ergo_watch_api: str = 'https://ergo.watch/api/sigmausd/state'
 oracle_pool_url: str = 'https://erg-oracle-ergusd.spirepools.com/frontendData'
 coingecko_url: str = 'https://api.coingecko.com/api/v3' # coins/markets?vs_currency=usd&ids=bitcoin"
 
@@ -34,38 +58,46 @@ router = APIRouter()
 
 ### ROUTES
 
-@router.get("/addresses/{username}", name="ergo:get-all-assets")
+#
+# All coin balances and tokens for wallet addresses
+# . calls /balance/address
+#
+@router.get("/user/{username}", name="asset:user-assets-by-wallet")
 async def get_all_assets(
     username: str = Path(..., min_length=3, regex="^[a-zA-Z0-9_-]+$"),
-    # current_user: UserInDB = Depends(get_current_active_user),
+    # current_user: UserInDB = Depends(get_current_active_user), # require auth
     profiles_repo: ProfilesRepository = Depends(get_repository(ProfilesRepository)),
 ) -> None:
     
-    balance = {}
+    # Final balance man contain multiple wallets
+    assets = {}
+
     profile = await profiles_repo.get_profile_by_username(username=username)
-    address_by_blockchain = json.loads(profile.addresses)
-    for blockchain in address_by_blockchain:
-        balance[blockchain] = []
+    wallets = json.loads(profile.addresses)
+    for wallet in wallets:
+        assets[wallet] = []
 
         # ergo
-        if blockchain == 'ergo':
-            for address in address_by_blockchain[blockchain]:
-                try: balance[blockchain].append(await get_asset_balance_from_address(address))
-                except: balance[blockchain].append("invalid response")
+        if wallet == 'ergo':
+            for address in wallets[wallet]:
+                try: assets[wallet].append(await get_asset_balance_from_address(address))
+                except: assets[wallet].append("invalid response")
 
         # ethereum
-        if blockchain == 'ethereum':
-            for address in address_by_blockchain[blockchain]:
+        if wallet == 'ethereum':
+            for address in wallets[wallet]:
                 try:
                     res = requests.get(f'https://api.ethplorer.io/getAddressInfo/{address}?apiKey=freekey')
-                    balance[blockchain].append({address: res.json()['ETH']['balance']})
-                except: balance[blockchain].append("invalid response")
+                    assets[wallet].append({address: res.json()['ETH']['balance']})
+                except: assets[wallet].append("invalid response")
 
-    return balance
+    return assets
 
 
-# coins and tokens
-@router.get("/balance/{address}", response_model=AssetPublic, name="ergo:get-balance")
+#
+# Single coin balance and tokens for wallet address
+#
+@router.get("/balance/{address}", response_model=AssetPublic, name="asset:wallet-balance")
 async def get_asset_balance_from_address(
     address: str = Path(..., min_length=40, regex="^[a-zA-Z0-9_-]+$"), # i.e. 9gDRYMhFwz2FjAcyYxgSqbwTmRzbkkx6vMujcRPLJWuxWd57q1S
 ) -> None: 
@@ -86,8 +118,8 @@ async def get_asset_balance_from_address(
     # normalize result
     wallet_assets["ERG"] = {
         "blockchain": "ergo",
-        "balance": balance['confirmed']['nanoErgs']/1000000000.0, # satoshis/kushtis
-        "unconfirmed": balance['unconfirmed']['nanoErgs']/1000000000.0, # may not be available for all blockchains
+        "balance": balance['confirmed']['nanoErgs']/nerg2erg, # satoshis/kushtis
+        "unconfirmed": balance['unconfirmed']['nanoErgs']/nerg2erg, # may not be available for all blockchains
         "tokens": balance['confirmed']['tokens'], # array
     }
     # unconfirmed?
@@ -114,22 +146,52 @@ async def get_asset_balance_from_address(
         "balance": wallet_assets,
     }
 
-@router.get("/{blockchain}/price", name="coin:get-asset-price")
+#
+# Find price by coin
+# - Allow SigUSD/RSV ergo tokens to be listed as coins (TODO: change from ergo.watch api)
+# - Allow multiple coins per blockchain (TODO: change from CoinGecko api)
+#
+@router.get("/price/{coin}", name="coin:coin-price")
 async def get_asset_current_price(
-    blockchain: str = None,
+    coin: str = None,
     # current_user: UserInDB = Depends(get_current_active_user), # use if need auth; making private or internal for ergohack
 ) -> None:
-    res = requests.get(f'{coingecko_url}/simple/price?vs_currencies={currency}&ids={blockchain}')
 
-    # handle invalid address or other error
-    if res.status_code != 200:
-        # raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Something went wrong.")
-        price = {}
+    price = 0.0 # init/default
+    coin = coin.lower()
+
+    # SigUSD/SigRSV
+    if coin in ('sigusd', 'sigrsv'):
+        res = (await requests.get(ergo_watch_api)).json()
+        if res:
+            if coin == 'sigusd':
+                price = 1/(res['peg_rate_nano']/nerg2erg)
+            else:        
+                circ_sigusd_cents = res['circ_sigusd']/100.0 # given in cents
+                peg_rate_nano = res['peg_rate_nano'] # also SigUSD
+                reserves = res['reserves'] # total amt in reserves (nanoerg)
+                liabilities = min(circ_sigusd_cents * peg_rate_nano, reserves) # lower of reserves or SigUSD*SigUSD_in_circulation
+                equity = reserves - liabilities # find equity, at least 0
+                if equity < 0: equity = 0
+                if res['circ_sigrsv'] <= 1:
+                    price = 0
+                else:
+                    price = equity/res['circ_sigrsv']/nerg2erg # SigRSV
+
+    # ...all other prices
     else:
-        try:
-            price = res.json()[blockchain][currency] 
-        except:
+        res = requests.get(f'{coingecko_url}/simple/price?vs_currencies={currency}&ids={coin}')
+
+        # handle invalid address or other error
+        if res.status_code != 200:
+            # raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Something went wrong.")
             price = {}
+        else:
+            try:
+                price = res.json()[coin][currency] 
+            except:
+                price = {}
+
 
     return {
         "price": price
