@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { useMediaQuery, Container } from '@mui/material';
 import { Box, styled, useTheme } from '@mui/system';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSnackbar } from 'notistack';
 
 import Header from '@components/Header';
 import Footer from '@components/Footer';
@@ -9,6 +11,7 @@ import BottomNav from '@components/navigation/BottomNav';
 import Aurora from '@components/stylistic/Aurora';
 import makeStyledScrollbar from 'styles/makeStyledScrollbar';
 import pageTransitions from './pageTransitions';
+import { useAuth } from 'lib/auth';
 
 const Root = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -19,18 +22,6 @@ const Root = styled('div')(({ theme }) => ({
   overflowX: 'hidden',
   overflowY: 'hidden',
 }));
-
-// const pageWrapper = {
-//   minHeight: '20vh',
-//   marginBottom: 6,
-//   width: '100vw',
-//   height: '100vh',
-//   overflowY: 'scroll',
-//   overflowX: 'hidden',
-//   [theme.breakpoints.up('lg')]: {
-//     ...makeStyledScrollbar(theme),
-//   },
-// };
 
 const PageWrapper = styled('div')(({ theme }) => ({
   minHeight: '20vh',
@@ -51,6 +42,32 @@ const Layout = ({ children }) => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Snackbars
+  const { enqueueSnackbar } = useSnackbar();
+
+  // Auth State
+  const { dispatch, authState, actions } = useAuth();
+  const { fetchUserFromToken } = actions;
+
+  // Check for user auth token and log user and attempt fetching user info if available.
+  useEffect(() => {
+    // Wrap function so that we can await it inside the useEffect
+    const _fetchUserFromToken = async (token) => {
+      const res = await fetchUserFromToken(token);
+      if (res.success) {
+        enqueueSnackbar(`Welcome back ${authState?.user?.userName}!`);
+      }
+    };
+
+    //1. Get token from Local Storage
+    const token = localStorage.getItem('access_token');
+
+    //2. If token exists, get user
+    if (token && !authState?.isAuthenticated) {
+      _fetchUserFromToken(token);
+    }
+  }, [authState.user]);
   return (
     <Root>
       <AnimatePresence exitBeforeEnter>

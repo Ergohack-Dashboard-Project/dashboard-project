@@ -1,24 +1,23 @@
 import Link from '@components/MuiNextLink';
 import { Button, Container, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import FilledInput from '@mui/material/FilledInput';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, styled } from '@mui/system';
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { Actions as authActions, FETCHING_USER_FROM_TOKEN_SUCCESS } from '../redux/auth';
+import React, { useEffect, useState } from 'react';
 import validation from '../utils/validation';
 import makeGlassBg from 'styles/makeGlassStyle';
+import { useAuth } from 'lib/auth';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 
-const LoginForm = ({ user, authError, isLoading, isAuthenticated, requestUserLogin }) => {
+const LoginForm = () => {
+  const router = useRouter();
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -26,6 +25,21 @@ const LoginForm = ({ user, authError, isLoading, isAuthenticated, requestUserLog
     password: '',
     showPassword: false,
   });
+
+  // Snackbars
+  const { enqueueSnackbar } = useSnackbar();
+
+  // Auth State
+  const { authState, actions } = useAuth();
+
+  // Check if user is signed in and reroute to home if detected.
+
+  useEffect(() => {
+    if (authState?.isAuthenticated) {
+      enqueueSnackbar(`Welcome back ${authState?.user?.userName}`);
+      router.push('/');
+    }
+  }, [authState?.user]);
 
   const handleClickShowPassword = () => {
     setValues({
@@ -52,15 +66,6 @@ const LoginForm = ({ user, authError, isLoading, isAuthenticated, requestUserLog
     setForm((form) => ({ ...form, [label]: value }));
   };
 
-  /*   const navigate = useNavigate()
-
-  // if the user is already authenticated, redirect them to the "/profile" page
-  React.useEffect(() => {
-    if (user?.email && isAuthenticated) {
-      navigate("/profile")
-    }
-  }, [user, navigate, isAuthenticated])
- */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -76,14 +81,14 @@ const LoginForm = ({ user, authError, isLoading, isAuthenticated, requestUserLog
 
     const action = await requestUserLogin({ email: form.email, password: form.password });
     // reset the password form state if the login attempt is not successful
-    if (action?.type !== FETCHING_USER_FROM_TOKEN_SUCCESS) {
+    if (action?.success) {
       setForm((form) => ({ ...form, password: '' }));
     }
   };
 
   const getFormErrors = () => {
     const formErrors = [];
-    if (authError && hasSubmitted) {
+    if (authState?.error && hasSubmitted) {
       formErrors.push(`Invalid credentials. Please try again.`);
     }
     if (errors.form) {
@@ -239,15 +244,16 @@ const ControlledField = ({
   );
 }; */
 
-const mapStateToProps = (state) => ({
-  authError: state.auth.error,
-  isLoading: state.auth.isLoading,
-  isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user,
-});
+// const mapStateToProps = (state) => ({
+//   authError: state.auth.error,
+//   isLoading: state.auth.isLoading,
+//   isAuthenticated: state.auth.isAuthenticated,
+//   user: state.auth.user,
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  requestUserLogin: ({ email, password }) => dispatch(authActions.requestUserLogin({ email, password })),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   requestUserLogin: ({ email, password }) => dispatch(authActions.requestUserLogin({ email, password })),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+// export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default LoginForm;
