@@ -1,9 +1,10 @@
-import { useMediaQuery } from '@mui/material';
+import { useMediaQuery, Container } from '@mui/material';
 import { Box, styled, useTheme } from '@mui/system';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import Header from '@components/Header';
+import Footer from '@components/Footer';
 import BottomNav from '@components/navigation/BottomNav';
 import Aurora from '@components/stylistic/Aurora';
 import makeStyledScrollbar from 'styles/makeStyledScrollbar';
@@ -33,7 +34,10 @@ const Root = styled('div')(({ theme }) => ({
 
 const PageWrapper = styled('div')(({ theme }) => ({
   minHeight: '20vh',
-  paddingBottom: theme.spacing(15),
+  paddingBottom: theme.spacing(3),
+  [theme.breakpoints.down('md')]: {
+    paddingBottom: theme.spacing(10),
+  },
   width: '100vw',
   height: '100vh',
   overflowY: 'scroll',
@@ -64,7 +68,10 @@ const Layout = ({ children }) => {
           exit='hidden'
         >
           <Header />
+          <Container maxWidth='lg'>
           {children}
+          <Footer />
+          </Container>
         </PageWrapper>
       </AnimatePresence>
       {isMobile && <BottomNav />}
