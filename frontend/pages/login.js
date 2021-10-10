@@ -31,6 +31,7 @@ const LoginForm = () => {
 
   // Auth State
   const { authState, actions } = useAuth();
+  const { requestUserLogin } = actions;
 
   // Check if user is signed in and reroute to home if detected.
 
