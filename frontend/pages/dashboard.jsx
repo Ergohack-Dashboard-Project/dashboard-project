@@ -50,6 +50,14 @@ const rawData = {
   },
 };
 
+const mockData = [
+  { token: 'ERG', name: 'Ergo', amount: 400, amountUSD: '4320' },
+  { token: 'ADA', name: 'Cardano', amount: 200, amountUSD: '450' },
+  { token: 'BTC', name: 'Bitcoin', amount: 1, amountUSD: '55,000' },
+  { token: 'ETH', name: 'Etherium', amount: 1, amountUSD: '2,800' },
+  { token: 'XRP', name: 'XRP', amount: 200, amountUSD: '430' },
+];
+
 const tokenDataArray = (data) => {
   let tokenObject = rawData.balance.confirmed.tokens;
   const keys = Object.keys(tokenObject);
@@ -81,6 +89,8 @@ const defaultHoldingData = wantedHoldingData.map((item) => {
 });
 defaultHoldingData[defaultHoldingData.length - 1].y = portfolioValue;
 
+console.log(wantedHoldingData);
+
 const Dashboard = () => {
   const [holdingData, setHoldingData] = useState(defaultHoldingData);
 
@@ -93,7 +103,7 @@ const Dashboard = () => {
       <Grid container spacing={2} sx={{ pt: 10, justifyContent: 'space-between' }}>
         <Grid item xs={12} md={6}>
           <GlassContainer>
-            <AssetList />
+            <AssetList assets={mockData} />
           </GlassContainer>
         </Grid>
 
