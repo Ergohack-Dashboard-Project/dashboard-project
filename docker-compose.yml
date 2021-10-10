@@ -3,13 +3,13 @@ version: '3.7'
 services:
   server:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile.backend
     container_name: server
     volumes:
-      - ./backend:/app
+      - ./backend:/backend/
     env_file:
-      - .env
+      - ./backend/.env
     ports:
       - 8000:8000
     depends_on:

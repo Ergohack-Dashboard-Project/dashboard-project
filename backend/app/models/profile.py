@@ -10,7 +10,6 @@ class ProfileBase(CoreModel):
     phone_number: Optional[str]
     bio: Optional[str]
     image: Optional[HttpUrl]
-    addresses: Optional[str]
 
 
 class ProfileCreate(ProfileBase):

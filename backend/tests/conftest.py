@@ -56,6 +56,16 @@ async def user_fixture_helper(*, db: Database, new_user: UserCreate) -> UserInDB
     return await user_repo.register_new_user(new_user=new_user)
 
 
+async def user_fixture_helper(*, db: Database, new_user: UserCreate) -> UserInDB:
+    user_repo = UsersRepository(db)
+
+    existing_user = await user_repo.get_user_by_email(email=new_user.email)
+    if existing_user:
+        return existing_user
+
+    return await user_repo.register_new_user(new_user=new_user)
+
+
 @pytest.fixture
 async def test_user(db: Database) -> UserInDB:
     new_user = UserCreate(email="lebron@james.io", username="lebronjames", password="heatcavslakers")

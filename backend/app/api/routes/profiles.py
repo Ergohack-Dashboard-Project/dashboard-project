@@ -1,8 +1,11 @@
 from fastapi import Depends, APIRouter, HTTPException, Path, Body, status
+
 from app.api.dependencies.auth import get_current_active_user
 from app.api.dependencies.database import get_repository
+
 from app.models.user import UserCreate, UserUpdate, UserInDB, UserPublic
 from app.models.profile import ProfileUpdate, ProfilePublic
+
 from app.db.repositories.profiles import ProfilesRepository
 
 
