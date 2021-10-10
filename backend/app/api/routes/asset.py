@@ -134,7 +134,7 @@ async def get_asset_balance_from_address(
             }
             tokens['price'] = price
         if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
-            price = (await get_asset_current_price('SigUSD'))['price']
+            price = (await get_asset_current_price('SigRSV'))['price']
             wallet_assets['SigRSV'] = {
                 "blockchain": "ergo",
                 "balance": token['amount'], # satoshis/kushtis
