@@ -124,6 +124,7 @@ async def get_asset_balance_from_address(
         "balance": balance['confirmed']['nanoErgs']/nerg2erg, # satoshis/kushtis
         "unconfirmed": balance['unconfirmed']['nanoErgs']/nerg2erg, # may not be available for all blockchains
         "tokens": balance['confirmed']['tokens'], # array
+        "price": (await get_asset_current_price('ERGO'))['price'],
     }
     # unconfirmed?
 
@@ -135,6 +136,7 @@ async def get_asset_balance_from_address(
                 "balance": token['amount'], # satoshis/kushtis
                 "unconfirmed": 0.0, # may not be available for all blockchains
                 "tokens": None, # array
+                "price": (await get_asset_current_price('SigUSD'))['price'],
             }
         if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
             wallet_assets['SigRSV'] = {
@@ -142,6 +144,7 @@ async def get_asset_balance_from_address(
                 "balance": token['amount'], # satoshis/kushtis
                 "unconfirmed": 0.0, # may not be available for all blockchains
                 "tokens": None, # array
+                "price": (await get_asset_current_price('SigRSV'))['price'],
             }
 
     return {
