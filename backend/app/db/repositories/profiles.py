@@ -10,7 +10,7 @@ CREATE_PROFILE_FOR_USER_QUERY = """
 """
 
 GET_PROFILE_BY_USER_ID_QUERY = """
-    SELECT id, full_name, phone_number, bio, image, user_id, created_at, updated_at
+    SELECT id, full_name, phone_number, bio, image, user_id, created_at, addresses
     FROM profiles
     WHERE user_id = :user_id;
 """
@@ -41,7 +41,7 @@ UPDATE_PROFILE_QUERY = """
         image        = :image,
         addresses    = :addresses
     WHERE user_id = :user_id
-    RETURNING id, full_name, phone_number, bio, image, user_id, created_at, updated_at;
+    RETURNING id, full_name, phone_number, bio, image, user_id, created_at, updated_at, addresses;
 """
 
 
