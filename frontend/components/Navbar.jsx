@@ -35,6 +35,7 @@ const Navbar = ({ navLinks }) => {
                   '&:hover': {
                     color: 'white',
                   },
+                  textTransform: 'none',
                 }}
                 underline='none'
               >
