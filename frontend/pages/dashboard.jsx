@@ -1,100 +1,85 @@
 import AssetList from '@components/dashboard/AssetList';
 import GlassContainer from '@components/GlassContainer';
 import { Grid, Typography, TextField, Box, Button } from '@mui/material';
-import { styled } from '@mui/system';
 import React, { useState, useEffect } from 'react';
-import makeGlassBg from 'styles/makeGlassStyle';
 import { VictoryChart, VictoryContainer, VictoryPie, VictoryLine } from 'victory';
+import axios from 'axios';
+import { useAuth } from 'src/auth';
 
-const rawData = {
-  address: '9gDRYMhFwz2FjAcyYxgSqbwTmRzbkkx6vMujcRPLJWuxWd57q1S',
-  balance: {
-    confirmed: {
-      nanoErgs: 878372247906,
-      price: 10.55,
-      tokens: [
+const rawData = 
+{
+  "address": "9fPRvaMYzBPotu6NGvZn4A6N4J2jDmRGs4Zwc9UhFFeSXgRJ8pS",
+  "balance": {
+    "SigRSV": {
+      "blockchain": "ergo",
+      "balance": 10,
+      "unconfirmed": 0,
+      "tokens": null,
+      "price": 0.0010023272561225077
+    },
+    "ERG": {
+      "blockchain": "ergo",
+      "balance": 2.072445086,
+      "unconfirmed": 0,
+      "tokens": [
         {
-          tokenId: '30974274078845f263b4f21787e33cc99e9ec19a17ad85a5bc6da2cca91c5a2e',
-          amount: 1000000000000,
-          decimals: 8,
-          name: 'WT_ADA',
-          price: 0.8,
-        },
-        {
-          tokenId: '710fda38e02408cd0bde13b8d55d708edba8ce60a2671c52de3f34347da69e44',
-          amount: 88750000000,
-          decimals: 2,
-          name: 'Tulip',
-          price: 0.000005,
-        },
-        {
-          tokenId: 'e2a8f60a50fa423a359dfadd3496243a656315a2b290f082e274259a5043d07f',
-          amount: 10000000,
-          decimals: 2,
-          name: 'Petunia',
-          price: 0.01,
-        },
-        {
-          tokenId: 'fbbaac7337d051c10fc3da0ccb864f4d32d40027551e1c3ea3ce361f39b91e40',
-          amount: 1000000,
-          decimals: 0,
-          name: 'kushti',
-          price: 0.00351,
-        },
+          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "amount": 10,
+          "decimals": 0,
+          "name": "SigRSV",
+          "price": 0.90023272561225077
+        }
       ],
-    },
-    unconfirmed: {
-      nanoErgs: 0,
-      tokens: [],
-    },
-  },
+      "price": 10.3
+    }
+  }
 };
-
 
 
 const tokenDataArray = (data) => {
-  let tokenObject = data.balance.confirmed.tokens;
-  const keys = Object.keys(tokenObject);
-  const res = [];
-  for (let i = 0; i < keys.length; i++) {
-    let token = tokenObject[keys[i]];
-    let obj = {
-      x: token.name,
-      y: token.price * (token.amount * Math.pow(10, -token.decimals)),
+    let tokenObject = data.balance.ERG.tokens;
+    const keys = Object.keys(tokenObject);
+    const res = [];
+    for (let i = 0; i < keys.length; i++) {
+      let token = tokenObject[keys[i]];
+      let obj = {
+        x: token.name,
+        y: token.price * (token.amount * Math.pow(10, -token.decimals)),
+      };
+      if (token.price > 0) res.push(obj);
+    }
+    const ergoValue = {
+      x: 'Ergo',
+      y: data.balance.ERG.price * data.balance.ERG.balance,
     };
-    res.push(obj);
-  }
-  const ergoValue = {
-    x: 'Ergo',
-    y: data.balance.confirmed.price * (data.balance.confirmed.nanoErgs * 0.000000001),
+    res.unshift(ergoValue);
+    return res;
   };
-  res.unshift(ergoValue);
-  return res;
-};
-
-const assetListArray = ( data ) => {
-  let tokenObject = data.balance.confirmed.tokens;
-  const keys = Object.keys(tokenObject);
-  const res = [];
-  for (let i = 0; i < keys.length; i++) {
-    let token = tokenObject[keys[i]];
-    let obj = {
-      token: token.name.substring(0,3).toUpperCase(),
-      name: token.name,
-      amount: token.amount,
-      amountUSD: token.price * (token.amount * Math.pow(10, -token.decimals))
+  
+  const assetListArray = ( data ) => {
+    let tokenObject = data.balance.ERG.tokens;
+    const keys = Object.keys(tokenObject);
+    const res = [];
+    for (let i = 0; i < keys.length; i++) {
+      let token = tokenObject[keys[i]];
+      let obj = {
+        token: token.name.substring(0,3).toUpperCase(),
+        name: token.name,
+        amount: token.amount,
+        amountUSD: token.price * (token.amount * Math.pow(10, -token.decimals))
+      };
+      
+      res.push(obj);
+    }
+    const ergoValue = {
+      token: 'ERG',
+      name: 'Ergo',
+      amount: data.balance.ERG.balance,
+      amountUSD: data.balance.ERG.price * data.balance.ERG.balance,
     };
-    res.push(obj);
+    res.unshift(ergoValue);
+    return res;
   }
-  const ergoValue = {
-    token: 'ERG',
-    name: 'Ergo',
-    amount: data.balance.confirmed.nanoErgs * 0.000000001,
-    amountUSD: data.balance.confirmed.price * (data.balance.confirmed.nanoErgs * 0.000000001),
-  };
-  res.unshift(ergoValue);
-  return res;
-}
 
 const wantedHoldingData = tokenDataArray(rawData);
 const portfolioValue = wantedHoldingData.map((item) => item.y).reduce((a, b) => a + b);
@@ -110,24 +95,66 @@ defaultHoldingData[defaultHoldingData.length - 1].y = portfolioValue;
 console.log(wantedHoldingData);
 
 const Dashboard = () => {
+  const auth = useAuth();
   const [holdingData, setHoldingData] = useState(defaultHoldingData);
+  const [walletInput, setWalletInput] = useState('');
+  const [walletData, setWalletData] = useState(null);
 
   useEffect(() => {
     setHoldingData(wantedHoldingData); // Setting the data that we want to display
   }, []);
 
+  const handleWalletFormChange = (e) => {
+    setWalletInput(e.target.value);
+  };
+
+  const handleSubmitWallet = async () => {
+    console.log('submit clicked with:', walletInput);
+
+    // Spaghetti code, will use api client later.
+    const defaultOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: auth?.accessToken ? `Bearer ${auth.accessToken}` : '',
+      },
+    };
+
+    const res = await axios
+      .get(`localhost:8000/api/asset/balance/${walletInput}`, { ...defaultOptions })
+      .catch((err) => {
+        console.log('ERROR FETCHING: ', err);
+      });
+    if (res?.data) {
+      setWalletData(res.data);
+    }
+
+    setWalletInput('');
+  };
+
   return (
     <>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}
-        >
-          <TextField fullWidth label="Enter wallet address" id="address" />
-          <Button variant="contained">View Wallet</Button>
-        </Box>
-      <Grid container spacing={2} sx={{ pt: 10, justifyContent: 'space-between' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          '& .MuiButton-root': {
+            paddingLeft: 2,
+          },
+        }}
+      >
+        <TextField
+          value={walletInput}
+          onChange={handleWalletFormChange}
+          fullWidth
+          label='Enter wallet address'
+          id='address'
+        />
+        <Button variant='contained' onClick={handleSubmitWallet}>
+          View Wallet
+        </Button>
+      </Box>
+      <Grid container spacing={2} justifyItems='stretch' sx={{ pt: 10 }}>
         <Grid item xs={12} md={6}>
           <GlassContainer>
             <AssetList assets={assetListArray(rawData)} />
