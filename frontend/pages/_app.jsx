@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { useSelector, useStore } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { SAVE_ACCESS_TOKEN_IN_STORE } from 'redux/auth';
-import { ProvideAuth, useAuth } from 'lib/auth';
+import { ProvideAuth, useAuth } from 'src/auth';
 import { SnackbarProvider } from 'notistack';
 
 // Client-side cache, shared for the whole session of the user in the browser.

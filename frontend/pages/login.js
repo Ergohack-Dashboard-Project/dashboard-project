@@ -12,7 +12,7 @@ import { Box, styled } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import validation from '../utils/validation';
 import makeGlassBg from 'styles/makeGlassStyle';
-import { useAuth } from 'lib/auth';
+import { useAuth } from 'src/auth';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 
@@ -80,10 +80,13 @@ const LoginForm = () => {
 
     setHasSubmitted(true);
 
-    const action = await requestUserLogin({ email: form.email, password: form.password });
+    const response = await requestUserLogin({ email: form.email, password: form.password });
     // reset the password form state if the login attempt is not successful
-    if (action?.success) {
+    if (response?.success) {
       setForm((form) => ({ ...form, password: '' }));
+    } else {
+      enqueueSnackbar('Error signing in. Please try again or contact admin.', { variant: 'error' });
+      console.log('ERROR SIGNING IN:', response?.error);
     }
   };
 

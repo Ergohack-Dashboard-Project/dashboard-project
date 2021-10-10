@@ -11,7 +11,7 @@ import BottomNav from '@components/navigation/BottomNav';
 import Aurora from '@components/stylistic/Aurora';
 import makeStyledScrollbar from 'styles/makeStyledScrollbar';
 import pageTransitions from './pageTransitions';
-import { useAuth } from 'lib/auth';
+import { useAuth } from 'src/auth';
 
 const Root = styled('div')(({ theme }) => ({
   position: 'absolute',
