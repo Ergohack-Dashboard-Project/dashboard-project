@@ -130,10 +130,9 @@ async def get_asset_balance_from_address(
     logging.info(f'Balance for ergo: {balance}')
 
     # handle SigUSD and SigRSV
-    tokens = {}
+    tokens = []
     for token in balance['confirmed']['tokens']:
-        tokens = token
-        tokens['price'] = 0.0
+        token['price'] = 0.0
         if token['name'] == 'SigUSD': # TokenId: 22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9
             price = (await get_asset_current_price('SigUSD'))['price']
             wallet_assets['SigUSD'] = {
@@ -143,7 +142,6 @@ async def get_asset_balance_from_address(
                 "tokens": None, # array
                 "price": price,
             }
-            tokens['price'] = price
         if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
             price = (await get_asset_current_price('SigRSV'))['price']
             wallet_assets['SigRSV'] = {
@@ -153,7 +151,7 @@ async def get_asset_balance_from_address(
                 "tokens": None, # array
                 "price": price,
             }
-            tokens['price'] = price
+        tokens.append(token)
 
     # normalize result
     wallet_assets["ERG"] = {
