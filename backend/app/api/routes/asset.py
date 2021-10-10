@@ -118,34 +118,41 @@ async def get_asset_balance_from_address(
         # raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Something went wrong.")
     logging.info(f'Balance for ergo: {balance}')
 
-    # normalize result
-    wallet_assets["ERG"] = {
-        "blockchain": "ergo",
-        "balance": balance['confirmed']['nanoErgs']/nerg2erg, # satoshis/kushtis
-        "unconfirmed": balance['unconfirmed']['nanoErgs']/nerg2erg, # may not be available for all blockchains
-        "tokens": balance['confirmed']['tokens'], # array
-        "price": (await get_asset_current_price('ERGO'))['price'],
-    }
-    # unconfirmed?
-
     # handle SigUSD and SigRSV
+    tokens = {}
     for token in balance['confirmed']['tokens']:
+        tokens = token
+        tokens['price'] = 0.0
         if token['name'] == 'SigUSD': # TokenId: 22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9
+            price = (await get_asset_current_price('SigUSD'))['price']
             wallet_assets['SigUSD'] = {
                 "blockchain": "ergo",
                 "balance": token['amount'], # satoshis/kushtis
                 "unconfirmed": 0.0, # may not be available for all blockchains
                 "tokens": None, # array
-                "price": (await get_asset_current_price('SigUSD'))['price'],
+                "price": price,
             }
+            tokens['price'] = price
         if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
+            price = (await get_asset_current_price('SigUSD'))['price']
             wallet_assets['SigRSV'] = {
                 "blockchain": "ergo",
                 "balance": token['amount'], # satoshis/kushtis
                 "unconfirmed": 0.0, # may not be available for all blockchains
                 "tokens": None, # array
-                "price": (await get_asset_current_price('SigRSV'))['price'],
+                "price": price,
             }
+            tokens['price'] = price
+
+    # normalize result
+    wallet_assets["ERG"] = {
+        "blockchain": "ergo",
+        "balance": balance['confirmed']['nanoErgs']/nerg2erg, # satoshis/kushtis
+        "unconfirmed": balance['unconfirmed']['nanoErgs']/nerg2erg, # may not be available for all blockchains
+        "tokens": tokens, # array
+        "price": (await get_asset_current_price('ERGO'))['price'],
+    }
+    # unconfirmed?
 
     return {
         "address": address,
