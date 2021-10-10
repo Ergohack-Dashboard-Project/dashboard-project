@@ -21,7 +21,7 @@ from app.models.token import AccessToken
 from app.services import auth_service
 
 
-router = APIRouter()
+router = APIRouter() 
 
 
 @router.post("/", response_model=UserPublic, name="users:register-new-user", status_code=HTTP_201_CREATED)
