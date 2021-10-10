@@ -64,10 +64,10 @@ const Layout = ({ children }) => {
     const token = localStorage.getItem('access_token');
 
     //2. If token exists, get user
-    if (token && !authState?.isAuthenticated) {
+    if (token && Object.keys(authState?.user) === 0) {
       _fetchUserFromToken(token);
     }
-  }, [authState.user]);
+  }, []);
   return (
     <Root>
       <AnimatePresence exitBeforeEnter>
