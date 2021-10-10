@@ -91,7 +91,18 @@ async def get_all_assets(
             for address in wallets[wallet]:
                 try:
                     res = requests.get(f'https://api.ethplorer.io/getAddressInfo/{address}?apiKey=freekey')
-                    assets[wallet].append({address: res.json()['ETH']['balance']})
+                    assets[wallet].append({
+                        "address": address,
+                        "balance": {
+                            'ETH': {
+                                'blockchain': 'ethereum',
+                                'balance': res.json()['ETH']['balance'],
+                                'unconfirmed': 0,
+                                'tokens': None,
+                                'price': (await get_asset_current_price('ethereum'))['price']
+                            }                     
+                        }
+                    })
                 except: assets[wallet].append("invalid response")
 
     return assets
