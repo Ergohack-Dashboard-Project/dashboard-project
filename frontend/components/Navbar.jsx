@@ -19,9 +19,9 @@ const Navbar = ({ navLinks }) => {
     >
       <Stack direction='row' spacing={4} sx={{ display: 'flex', alignItems: 'center' }}>
         {/*  TEMP LOGO THAT I DIDN"T END UP LIKING. (AQUISTOY) */}
-        <MuiNextLink href={'/'} variant='button' underline='none'>
+        {/* <MuiNextLink href={'/'} variant='button' underline='none'>
           <ErgoDashLogo />
-        </MuiNextLink>
+        </MuiNextLink> */}
 
         {!isMobile && (
           <>
