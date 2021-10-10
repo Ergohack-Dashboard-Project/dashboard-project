@@ -80,25 +80,25 @@ const Layout = ({ children }) => {
           animate='visible'
           exit='hidden'
         >
+
       <AnimatePresence exitBeforeEnter>
         <Aurora key={router.route} />
       </AnimatePresence>
+
       <Container maxWidth='lg'>
         <Header />
       </Container>
-      <AnimatePresence exitBeforeEnter>
+
+      
         {/* Page transition animations  */}
           <Container maxWidth='lg' sx={{ minHeight: '80vh' }}>
-          
-          
             {children}
           </Container>
           <Container maxWidth='lg' sx={{ position: 'relative' }}>
             <Footer />
           </Container>
 
-        
-      </AnimatePresence>
+      
       </PageWrapper>
       {isMobile && <BottomNav />}
     </Root>
