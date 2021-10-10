@@ -1,6 +1,6 @@
 import AssetList from '@components/dashboard/AssetList';
 import GlassContainer from '@components/GlassContainer';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, TextField, Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import React, { useState, useEffect } from 'react';
 import makeGlassBg from 'styles/makeGlassStyle';
@@ -49,6 +49,8 @@ const rawData = {
     },
   },
 };
+
+
 
 const tokenDataArray = (data) => {
   let tokenObject = data.balance.confirmed.tokens;
@@ -116,6 +118,15 @@ const Dashboard = () => {
 
   return (
     <>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}
+        >
+          <TextField fullWidth label="Enter wallet address" id="address" />
+          <Button variant="contained">View Wallet</Button>
+        </Box>
       <Grid container spacing={2} sx={{ pt: 10, justifyContent: 'space-between' }}>
         <Grid item xs={12} md={6}>
           <GlassContainer>
