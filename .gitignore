@@ -35,3 +35,5 @@ poetry.lock
 
 # Misc
 .env
+frontend/package-lock.json
+frontend/yarn.lock

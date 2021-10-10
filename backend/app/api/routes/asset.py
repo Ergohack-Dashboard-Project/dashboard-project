@@ -1,6 +1,8 @@
 import requests 
 import json
+import pandas as pd
 
+from sqlalchemy import create_engine
 from fastapi import Depends, APIRouter, Path #, Body, status, HTTPException
 # from fastapi.security import OAuth2PasswordRequestForm
 from app.services import auth_service
@@ -192,6 +194,41 @@ async def get_asset_current_price(
             except:
                 price = {}
 
+
+    return {
+        "price": price
+    }
+
+
+#
+# Find price by coin
+# - Allow SigUSD/RSV ergo tokens to be listed as coins (TODO: change from ergo.watch api)
+# - Allow multiple coins per blockchain (TODO: change from CoinGecko api)
+#
+@router.get("/price/history/{coin}/{lastNmonths}", name="coin:coin-price-historical")
+async def get_asset_historical_price(
+    coin: str = None,
+    lastNmonths: int = None,
+    # current_user: UserInDB = Depends(get_current_active_user), # use if need auth; making private or internal for ergohack
+) -> None:
+
+    price = 0.0 # init/default
+    coin = coin.lower()
+
+    # SigUSD/SigRSV
+    if coin in ('sigusd', 'sigrsv'):
+        price = {}
+
+    # ...all other prices
+    else:
+        con = create_engine("postgresql://ergohack:ergohack@db:5432/test")
+        sql = f'''
+            select datetime, "openPriceUsd", "closePriceUsd", "highPriceUsd", "lowPriceUsd", volume, marketcap 
+            from public.ergo_historical_ohlcv_daily
+            where datetime > CURRENT_DATE - INTERVAL '{lastNmonths} months'
+        '''
+        df = pd.read_sql_query(sql, con=con)
+        price = df.to_dict('records')
 
     return {
         "price": price
