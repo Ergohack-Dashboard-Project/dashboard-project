@@ -1,18 +1,15 @@
-import Container from '@mui/material/Container';
 import Hero from '@components/Hero';
 import { Typography } from '@mui/material';
-import { Box } from '@mui/system';
 
 const Homepage = () => {
   return (
-    
-      <><Hero
-        title='Welcome to ErgoPad'
-        subtitle='We are a token launch platform for Ergo giving you an 
-        opportunity to get in on the ground floor with Ergo token IDOs. We 
-        help projects navigate Ergoscript to build safe apps for you to invest in.' 
+    <>
+      <Hero
+        title='Welcome to ErgoDash'
+        subtitle='Aggregate all your balances from different wallets into a single platform, and keep track of your decentralized assets in a "centralized" Dashboard. Use Machine Learning to give insights into your deFi data.'
       />
-      <Typography variant='h4'>Home Page</Typography><Typography color='secondary'>
+      <Typography variant='h4'>Home Page</Typography>
+      <Typography color='secondary'>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos, cupiditate! Odio, aliquam soluta vel, eum illum corrupti
         incidunt nobis porro mollitia itaque reiciendis. Aut, minus dolore! Delectus pariatur praesentium dolorem? In at,
         quibusdam vero eligendi provident veritatis ipsam suscipit nisi similique nulla est magni harum. Cumque maiores eos alias,
@@ -41,13 +38,15 @@ const Homepage = () => {
         eius porro fuga, quod laborum, veritatis eum repellendus voluptatem aliquam ad perferendis quasi corrupti? Voluptates
         blanditiis earum optio omnis consectetur sapiente? Aliquid, expedita distinctio enim quos quis autem totam blanditiis
         ducimus laborum temporibus non. Repellat eaque aliquid perspiciatis fuga iste nam! Ut, iusto suscipit.
-      </Typography><Typography
+      </Typography>
+      <Typography
         color='primary'
         variant='h2'
         sx={{ fontWeight: 'bold', '& span': { color: (theme) => theme.palette.secondary.main }, paddingTop: 2 }}
       >
         Now with even <span>LONGER</span> text!
-      </Typography><Typography color='secondary'>
+      </Typography>
+      <Typography color='secondary'>
         {' '}
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sint eveniet alias ratione ad! Magnam ea deleniti molestiae
         quam ad tempore earum amet, sapiente autem asperiores. Ex enim incidunt dignissimos? Suscipit eaque rerum repellendus
@@ -78,7 +77,8 @@ const Homepage = () => {
         maiores eius odit, corporis voluptate, doloremque id! Aperiam laudantium quis unde officia dolor eveniet? Numquam, libero
         reprehenderit corporis quo dicta architecto mollitia alias nulla, maiores tenetur soluta aliquid error aperiam, vitae modi
         sunt accusantium dolor. Nihil eius magni quae dolor aliquam ex quis sunt?
-      </Typography></>
+      </Typography>
+    </>
   );
 };
 

@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Container,
-  Toolbar,
-  IconButton,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
+import { AppBar, Container, Toolbar, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/system';
 import Home from '@mui/icons-material/Home';
 import MuiNextLink from '@components/MuiNextLink';
@@ -35,10 +28,7 @@ const Header = () => {
       <HideOnScroll>
         <AppBar position='fixed' color='transparent' sx={{ boxShadow: 'none' }}>
           <Toolbar>
-            <Container
-              maxWidth='lg'
-              sx={{ display: `flex`, justifyContent: `space-between` }}
-            >
+            <Container maxWidth='lg' sx={{ display: `flex`, justifyContent: `space-between`, padding: { xs: 0 } }}>
               {/* <IconButton edge='start' aria-label='home'>
                 <MuiNextLink activeClassName='active' href='/'>
                   <Home

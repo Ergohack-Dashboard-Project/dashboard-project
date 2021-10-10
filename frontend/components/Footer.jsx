@@ -9,7 +9,7 @@ const Footer = () => {
     <>
       <Grid container spacing={1} sx={{ pt: 10, justifyContent: 'space-between' }}>
         {/* <Grid item xs={12} md={4}></Grid> */}
-        <Grid item xs={6} md={2}>
+        <Grid item xs={6} md={2} sx={{ bgcolor: 'blue' }}>
           <Typography sx={titleStyles}>COMPANY</Typography>
           <List>
             <ListItem disableGutters sx={listItemStyles}>
