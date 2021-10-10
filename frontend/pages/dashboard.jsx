@@ -50,16 +50,8 @@ const rawData = {
   },
 };
 
-const mockData = [
-  { token: 'ERG', name: 'Ergo', amount: 400, amountUSD: '4320' },
-  { token: 'ADA', name: 'Cardano', amount: 200, amountUSD: '450' },
-  { token: 'BTC', name: 'Bitcoin', amount: 1, amountUSD: '55,000' },
-  { token: 'ETH', name: 'Etherium', amount: 1, amountUSD: '2,800' },
-  { token: 'XRP', name: 'XRP', amount: 200, amountUSD: '430' },
-];
-
 const tokenDataArray = (data) => {
-  let tokenObject = rawData.balance.confirmed.tokens;
+  let tokenObject = data.balance.confirmed.tokens;
   const keys = Object.keys(tokenObject);
   const res = [];
   for (let i = 0; i < keys.length; i++) {
@@ -77,6 +69,30 @@ const tokenDataArray = (data) => {
   res.unshift(ergoValue);
   return res;
 };
+
+const assetListArray = ( data ) => {
+  let tokenObject = data.balance.confirmed.tokens;
+  const keys = Object.keys(tokenObject);
+  const res = [];
+  for (let i = 0; i < keys.length; i++) {
+    let token = tokenObject[keys[i]];
+    let obj = {
+      token: token.name.substring(0,3).toUpperCase(),
+      name: token.name,
+      amount: token.amount,
+      amountUSD: token.price * (token.amount * Math.pow(10, -token.decimals))
+    };
+    res.push(obj);
+  }
+  const ergoValue = {
+    token: 'ERG',
+    name: 'Ergo',
+    amount: data.balance.confirmed.nanoErgs * 0.000000001,
+    amountUSD: data.balance.confirmed.price * (data.balance.confirmed.nanoErgs * 0.000000001),
+  };
+  res.unshift(ergoValue);
+  return res;
+}
 
 const wantedHoldingData = tokenDataArray(rawData);
 const portfolioValue = wantedHoldingData.map((item) => item.y).reduce((a, b) => a + b);
@@ -103,7 +119,7 @@ const Dashboard = () => {
       <Grid container spacing={2} sx={{ pt: 10, justifyContent: 'space-between' }}>
         <Grid item xs={12} md={6}>
           <GlassContainer>
-            <AssetList assets={mockData} />
+            <AssetList assets={assetListArray(rawData)} />
           </GlassContainer>
         </Grid>
 
@@ -128,7 +144,7 @@ const Dashboard = () => {
             </GlassContainer>
           </Grid>
 
-          <Grid>
+          {/* <Grid>
             <GlassContainer>
               <Typography variant='h4'>Price History</Typography>
               <VictoryLine
@@ -146,7 +162,7 @@ const Dashboard = () => {
                 animate={{ easing: 'exp' }}
               />
             </GlassContainer>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </>
