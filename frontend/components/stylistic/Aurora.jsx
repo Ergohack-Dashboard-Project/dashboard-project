@@ -5,7 +5,7 @@ import React from 'react';
 const Blur = styled('svg')(({ theme }) => ({
   //   paddingTop: '2000px',
   position: 'absolute',
-  right: '-21vw',
+  right: '-45vw',
   top: '-15vh',
   zIndex: -1,
 }));

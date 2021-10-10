@@ -1,8 +1,8 @@
-import Container from '@mui/material/Container';
+import { Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import React, { useState, useEffect } from 'react';
 import makeGlassBg from 'styles/makeGlassStyle';
-import { VictoryChart, VictoryContainer, VictoryPie } from 'victory';
+import { VictoryChart, VictoryContainer, VictoryPie, VictoryLine } from 'victory';
 
 const rawData = 
   {
@@ -90,26 +90,61 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Container  maxWidth='lg'>    
-      <h1>This is the dashboard</h1>
-      <GlassContainer>
-        <h3>Wallet Holdings</h3>
-          <VictoryPie
-            innerRadius={100}
-            data={holdingData}
-            colorScale="cool"
-            style={{ labels: { fill: "white" } }}
-            containerComponent={
-              <VictoryContainer
-                style={{
-                  touchAction: "auto"
-                }}
-              />
-            }
-            animate={{ easing: 'exp' }}
-          />
-      </GlassContainer>
-    </Container>
+      <>
+    <Grid container spacing={2} sx={{ pt: 10, justifyContent: 'space-between' }}>
+
+        <Grid item xs={12} md={6}>
+          <GlassContainer>
+            <h3>Asset List</h3>
+          </GlassContainer>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+
+          <Grid>
+            <GlassContainer>
+              <h3>Wallet Holdings</h3>
+                <VictoryPie
+                  innerRadius={100}
+                  data={holdingData}
+                  colorScale="cool"
+                  style={{ labels: { fill: "white" } }}
+                  containerComponent={
+                    <VictoryContainer
+                      style={{
+                        touchAction: "auto"
+                      }}
+                    />
+                  }
+                  animate={{ easing: 'exp' }}
+                />
+            </GlassContainer>
+          </Grid>
+        
+          <Grid>
+            <GlassContainer>
+              <h3>Price History</h3>
+                <VictoryLine
+                  innerRadius={100}
+                  data={holdingData}
+                  colorScale="cool"
+                  style={{ labels: { fill: "white" } }}
+                  containerComponent={
+                    <VictoryContainer
+                      style={{
+                        touchAction: "auto"
+                      }}
+                    />
+                  }
+                  animate={{ easing: 'exp' }}
+                />
+            </GlassContainer>
+          </Grid>
+
+        </Grid>
+
+    </Grid>
+    </>
   );
 };
 
@@ -124,3 +159,5 @@ const GlassContainer = styled('div')(({ theme }) => ({
 
 export default Dashboard;
   
+
+

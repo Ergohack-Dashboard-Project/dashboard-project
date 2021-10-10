@@ -14,7 +14,7 @@ import pageTransitions from './pageTransitions';
 import { useAuth } from 'src/auth';
 
 const Root = styled('div')(({ theme }) => ({
-  position: 'absolute',
+  position: 'relative',
   top: 0,
   left: 0,
   height: '100vh',
@@ -25,10 +25,11 @@ const Root = styled('div')(({ theme }) => ({
 
 const PageWrapper = styled('div')(({ theme }) => ({
   minHeight: '20vh',
-  paddingBottom: theme.spacing(3),
+  marginBottom: theme.spacing(3),
   [theme.breakpoints.down('md')]: {
-    paddingBottom: theme.spacing(10),
+    marginBottom: theme.spacing(10),
   },
+  position: 'relative',
   width: '100vw',
   height: '100vh',
   overflowY: 'scroll',
@@ -70,13 +71,8 @@ const Layout = ({ children }) => {
   }, []);
   return (
     <Root>
-      <AnimatePresence exitBeforeEnter>
-        <Aurora key={router.route} />
-      </AnimatePresence>
-
-      <AnimatePresence exitBeforeEnter>
-        {/* Page transition animations  */}
-        <PageWrapper
+      
+      <PageWrapper
           as={motion.div}
           key={router.route}
           variants={pageTransitions}
@@ -84,15 +80,26 @@ const Layout = ({ children }) => {
           animate='visible'
           exit='hidden'
         >
-          <Header />
+      <AnimatePresence exitBeforeEnter>
+        <Aurora key={router.route} />
+      </AnimatePresence>
+      <Container maxWidth='lg'>
+        <Header />
+      </Container>
+      <AnimatePresence exitBeforeEnter>
+        {/* Page transition animations  */}
           <Container maxWidth='lg' sx={{ minHeight: '80vh' }}>
+          
+          
             {children}
           </Container>
-          <Container maxWidth='lg'>
+          <Container maxWidth='lg' sx={{ position: 'relative' }}>
             <Footer />
           </Container>
-        </PageWrapper>
+
+        
       </AnimatePresence>
+      </PageWrapper>
       {isMobile && <BottomNav />}
     </Root>
   );

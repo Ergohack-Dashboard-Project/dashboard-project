@@ -90,8 +90,6 @@ def create_profiles_table() -> None:
     )
 
 
-
-
 def upgrade() -> None:
     create_updated_at_trigger()
     create_users_table()
