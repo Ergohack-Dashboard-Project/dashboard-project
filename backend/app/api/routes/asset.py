@@ -38,6 +38,7 @@ Examples:
 > http://localhost:8000/api/asset/price/cardano
 > http://localhost:8000/api/asset/price/sigusd
 > http://localhost:8000/api/asset/balance/9iD7JfYYemJgVz7nTGg9gaHuWg7hBbHo2kxrrJawyz4BD1r9fLS
+> http://localhost:8000/api/asset/price/history/ergo/3
 
 """
 
