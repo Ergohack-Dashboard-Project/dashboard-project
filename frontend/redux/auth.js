@@ -64,6 +64,7 @@ export default function authReducer(state = initialState.auth, action = {}) {
         userLoaded: true,
         isLoading: false,
         error: action.error,
+        authToken: null,
         user: {},
       };
     case REQUEST_USER_SIGN_UP:
@@ -137,7 +138,7 @@ Actions.requestUserLogin = ({ email, password }) => {
 Actions.fetchUserFromToken = (access_token) => {
   return async (dispatch) => {
     dispatch({ type: FETCHING_USER_FROM_TOKEN });
-    const token = access_token ? access_token : localStorage.getItem('access_token');
+    const token = access_token ?? null;
 
     const headers = {
       'Content-Type': 'application/json',
@@ -177,7 +178,9 @@ Actions.registerNewUser = ({ username, email, password }) => {
         onSuccess: (res) => {
           // stash the access_token our server returns
           const access_token = res?.data?.access_token?.access_token;
-          localStorage.setItem('access_token', access_token);
+
+          // save the token in the store.
+          dispatch({ type: SAVE_ACCESS_TOKEN_IN_STORE, data: access_token });
           return dispatch(Actions.fetchUserFromToken(access_token));
         },
         onFailure: (res) => ({
