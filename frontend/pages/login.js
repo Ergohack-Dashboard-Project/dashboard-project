@@ -11,10 +11,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, styled } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import validation from '../utils/validation';
-import makeGlassBg from 'styles/makeGlassStyle';
 import { useAuth } from 'src/auth';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
+import GlassContainer from '@components/GlassContainer';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -178,16 +178,6 @@ const titleStyles = {
   fontWeight: 'bold',
   marginBottom: (theme) => theme.spacing(4),
 };
-
-// container for login form
-const GlassContainer = styled('div')(({ theme }) => ({
-  ...makeGlassBg(theme),
-  padding: 20,
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-}));
 
 // Actions (Buttons)
 const ActionsContainer = styled('div')(({ theme }) => ({
