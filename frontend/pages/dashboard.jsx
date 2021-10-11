@@ -23,7 +23,7 @@ const rawData =
       "unconfirmed": 0,
       "tokens": [
         {
-          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "tokenId": "003bd19d0187117f130b654b0939929ff5c7709f843c5c4dd158949285d0",
           "amount": 115215,
           "decimals": 0,
           "name": "SigRSV",
@@ -31,21 +31,21 @@ const rawData =
         },
 
         {
-          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "tokenId": "003bd19d0187117f130b62e1bca2234439929ff5c7709f843c5c4dd158949285d0",
           "amount": 163221,
           "decimals": 0,
           "name": "Tulip",
           "price": 0.00005
         },
         {
-          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "tokenId": "003bd19d0187117f130b62e1bcab09354329ff5c7709f843c5c4dd158949285d0",
           "amount": 17432,
           "decimals": 0,
           "name": "Kushti",
           "price": 0.001
         },
         {
-          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "tokenId": "003bd19d0187117f130b62e3bcab0939929ff5c7709f843c5c4dd158949285d0",
           "amount": 675,
           "decimals": 0,
           "name": "ErDoge",
@@ -58,7 +58,7 @@ const rawData =
 };
 
 
-const tokenDataArray = (data) => {
+function tokenDataArray(data) {
     let tokenObject = data.balance.ERG.tokens;
     const keys = Object.keys(tokenObject);
     const res = [];
@@ -78,7 +78,7 @@ const tokenDataArray = (data) => {
     return res;
   };
   
-  const assetListArray = ( data ) => {
+  function assetListArray(data) {
     let tokenObject = data.balance.ERG.tokens;
     const keys = Object.keys(tokenObject);
     const res = [];
@@ -87,6 +87,7 @@ const tokenDataArray = (data) => {
       let obj = {
         token: token.name ? token.name.substring(0,3).toUpperCase() : '',
         name: token.name ? token.name : '',
+        id: token.tokenId,
         amount: token.amount.toFixed(3),
         amountUSD: (token.price * (token.amount * Math.pow(10, -token.decimals))).toFixed(2)
       };
@@ -96,12 +97,13 @@ const tokenDataArray = (data) => {
     const ergoValue = {
       token: 'ERG',
       name: 'Ergo',
+      id: 'ergid',
       amount: data.balance.ERG.balance.toFixed(3),
       amountUSD: (data.balance.ERG.price * data.balance.ERG.balance).toFixed(2),
     };
     res.unshift(ergoValue);
     return res;
-  }
+  };
 
 const wantedHoldingData = tokenDataArray(rawData);
 const portfolioValue = wantedHoldingData.map((item) => item.y).reduce((a, b) => a + b);
@@ -140,7 +142,7 @@ const Dashboard = () => {
     };
 
     const res = await axios
-      .get(`http://tulipfarm.one:8000/api/asset/balance/${walletInput}`, { ...defaultOptions })
+      .get(`http://localhost:8000/api/asset/balance/${walletInput}`, { ...defaultOptions })
       .catch((err) => {
         console.log('ERROR FETCHING: ', err);
       });
@@ -151,7 +153,7 @@ const Dashboard = () => {
       console.log(assetListArray(res.data));
     }
 
-    setWalletInput('');
+    setWalletInput(walletInput);
   };
 
   return (
