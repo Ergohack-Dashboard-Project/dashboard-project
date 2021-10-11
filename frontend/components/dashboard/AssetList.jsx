@@ -19,7 +19,7 @@ const AssetList = ({ assets }) => {
       </Typography>
 
       {assets.map((asset) => {
-        return <AssetItem asset={asset} />;
+        return <AssetItem key={asset.name} asset={asset} />;
       })}
     </Container>
   );

@@ -24,10 +24,32 @@ const rawData =
       "tokens": [
         {
           "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
-          "amount": 10,
+          "amount": 115215,
           "decimals": 0,
           "name": "SigRSV",
-          "price": 0.90023272561225077
+          "price": 0.00900232725612
+        },
+
+        {
+          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "amount": 163221,
+          "decimals": 0,
+          "name": "Tulip",
+          "price": 0.00005
+        },
+        {
+          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "amount": 17432,
+          "decimals": 0,
+          "name": "Kushti",
+          "price": 0.001
+        },
+        {
+          "tokenId": "003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0",
+          "amount": 675,
+          "decimals": 0,
+          "name": "ErDoge",
+          "price": 0.0022
         }
       ],
       "price": 10.3
@@ -44,13 +66,13 @@ const tokenDataArray = (data) => {
       let token = tokenObject[keys[i]];
       let obj = {
         x: token.name,
-        y: token.price * (token.amount * Math.pow(10, -token.decimals)),
+        y: (token.price * (token.amount * Math.pow(10, -token.decimals))).toFixed(2)
       };
       if (token.price > 0) res.push(obj);
     }
     const ergoValue = {
       x: 'Ergo',
-      y: data.balance.ERG.price * data.balance.ERG.balance,
+      y: (data.balance.ERG.price * data.balance.ERG.balance).toFixed(2)
     };
     res.unshift(ergoValue);
     return res;
@@ -65,8 +87,8 @@ const tokenDataArray = (data) => {
       let obj = {
         token: token.name.substring(0,3).toUpperCase(),
         name: token.name,
-        amount: token.amount,
-        amountUSD: token.price * (token.amount * Math.pow(10, -token.decimals))
+        amount: token.amount.toFixed(3),
+        amountUSD: (token.price * (token.amount * Math.pow(10, -token.decimals))).toFixed(2)
       };
       
       res.push(obj);
@@ -74,8 +96,8 @@ const tokenDataArray = (data) => {
     const ergoValue = {
       token: 'ERG',
       name: 'Ergo',
-      amount: data.balance.ERG.balance,
-      amountUSD: data.balance.ERG.price * data.balance.ERG.balance,
+      amount: data.balance.ERG.balance.toFixed(3),
+      amountUSD: (data.balance.ERG.price * data.balance.ERG.balance).toFixed(2),
     };
     res.unshift(ergoValue);
     return res;
@@ -92,13 +114,11 @@ const defaultHoldingData = wantedHoldingData.map((item) => {
 });
 defaultHoldingData[defaultHoldingData.length - 1].y = portfolioValue;
 
-console.log(wantedHoldingData);
-
 const Dashboard = () => {
   const auth = useAuth();
   const [holdingData, setHoldingData] = useState(defaultHoldingData);
   const [walletInput, setWalletInput] = useState('');
-  const [walletData, setWalletData] = useState(null);
+  const [assetList, setAssetList] = useState(assetListArray(rawData));
 
   useEffect(() => {
     setHoldingData(wantedHoldingData); // Setting the data that we want to display
@@ -125,7 +145,10 @@ const Dashboard = () => {
         console.log('ERROR FETCHING: ', err);
       });
     if (res?.data) {
-      setWalletData(res.data);
+      setHoldingData(tokenDataArray(res.data));
+      setAssetList(assetListArray(res.data));
+      console.log(tokenDataArray(res.data));
+      console.log(assetListArray(res.data));
     }
 
     setWalletInput('');
@@ -154,19 +177,14 @@ const Dashboard = () => {
           View Wallet
         </Button>
       </Box>
-      <Grid container spacing={2} justifyItems='stretch' sx={{ pt: 10 }}>
-        <Grid item xs={12} md={6}>
-          <GlassContainer>
-            <AssetList assets={assetListArray(rawData)} />
-          </GlassContainer>
-        </Grid>
+      <Grid container spacing={1} justifyItems='stretch' sx={{ pt: 10 }}>
 
-        <Grid item xs={12} md={6}>
-          <Grid>
+          <Grid item xs={12} md={6}>
             <GlassContainer>
               <Typography variant='h4'>Wallet Holdings</Typography>
               <VictoryPie
                 innerRadius={100}
+                padAngle={2}
                 data={holdingData}
                 colorScale='cool'
                 style={{ labels: { fill: 'white' } }}
@@ -181,27 +199,14 @@ const Dashboard = () => {
               />
             </GlassContainer>
           </Grid>
-
-          {/* <Grid>
-            <GlassContainer>
-              <Typography variant='h4'>Price History</Typography>
-              <VictoryLine
-                innerRadius={100}
-                data={holdingData}
-                colorScale='cool'
-                style={{ labels: { fill: 'white' } }}
-                containerComponent={
-                  <VictoryContainer
-                    style={{
-                      touchAction: 'auto',
-                    }}
-                  />
-                }
-                animate={{ easing: 'exp' }}
-              />
-            </GlassContainer>
-          </Grid> */}
+        
+        <Grid item xs={12} md={6}>
+          <GlassContainer>
+            <AssetList assets={assetList} />
+          </GlassContainer>
         </Grid>
+
+        
       </Grid>
     </>
   );
