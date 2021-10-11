@@ -120,7 +120,7 @@ const Dashboard = () => {
     };
 
     const res = await axios
-      .get(`localhost:8000/api/asset/balance/${walletInput}`, { ...defaultOptions })
+      .get(`http://tulipfarm.one:8000/api/asset/balance/${walletInput}`, { ...defaultOptions })
       .catch((err) => {
         console.log('ERROR FETCHING: ', err);
       });
