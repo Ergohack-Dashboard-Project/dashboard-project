@@ -85,8 +85,8 @@ const tokenDataArray = (data) => {
     for (let i = 0; i < keys.length; i++) {
       let token = tokenObject[keys[i]];
       let obj = {
-        token: token.name.substring(0,3).toUpperCase(),
-        name: token.name,
+        token: token.name ? token.name.substring(0,3).toUpperCase() : '',
+        name: token.name ? token.name : '',
         amount: token.amount.toFixed(3),
         amountUSD: (token.price * (token.amount * Math.pow(10, -token.decimals))).toFixed(2)
       };
