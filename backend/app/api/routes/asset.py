@@ -32,6 +32,7 @@ Notes:
 . TODO: intended to use reducers/redux model to improve testability/stability
 . Replace APIs with database calls once data is populated (need supporting import scripts to maintain)
   - if keeping API calls, replace requests with async (i.e. httpx or aiohttp) to avoid blocking (requests is synchronous)
+. ?? is this SigRSV? 003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0
 
 Examples:
 > http://localhost:8000/api/asset/user/hello
@@ -133,7 +134,8 @@ async def get_asset_balance_from_address(
     tokens = []
     for token in balance['confirmed']['tokens']:
         token['price'] = 0.0
-        if token['name'] == 'SigUSD': # TokenId: 22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9
+        # if token['name'] == 'SigUSD': # TokenId: 22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9
+        if token['tokenId'] == '22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9': 
             price = (await get_asset_current_price('SigUSD'))['price']
             wallet_assets['SigUSD'] = {
                 "blockchain": "ergo",
@@ -143,7 +145,8 @@ async def get_asset_balance_from_address(
                 "price": price,
             }
             token['price'] = price
-        if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
+        # if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
+        if token['tokenId'] == '5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393':
             price = (await get_asset_current_price('SigRSV'))['price']
             wallet_assets['SigRSV'] = {
                 "blockchain": "ergo",
