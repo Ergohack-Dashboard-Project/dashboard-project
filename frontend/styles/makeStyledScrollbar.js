@@ -7,7 +7,7 @@ const makeStyledScrollbar = (theme, barWidth = '10px') => ({
     // height: '10px',
   },
   '&::-webkit-scrollbar-thumb': {
-    background: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
     borderRadius: barWidth,
   },
 });

@@ -16,19 +16,19 @@ services:
       - db
     command: uvicorn app.api.server:app --reload --workers 1 --reload-dir /app --host 0.0.0.0 --port 8000
 
-  ui:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: ui
-    volumes:
-      - ./frontend:/app
-    env_file:
-      - .env
-    ports:
-      - 3000:3000
-    # entrypoint: nodemon ./forever.js
-    entrypoint: nodemon -L --exec yarn dev
+  # ui:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.frontend
+  #   container_name: ui
+  #   volumes:
+  #     - ./frontend:/app
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 3000:3000
+  #   # entrypoint: nodemon ./forever.js
+  #   entrypoint: nodemon -L --exec yarn dev
 
   db:
     image: postgres:13-alpine

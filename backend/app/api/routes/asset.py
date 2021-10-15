@@ -114,7 +114,7 @@ async def get_all_assets(
 #
 @router.get("/balance/{address}", response_model=AssetPublic, name="asset:wallet-balance")
 async def get_asset_balance_from_address(
-    address: str = Path(..., min_length=40, regex="^[a-zA-Z0-9_-]+$"), # i.e. 9gDRYMhFwz2FjAcyYxgSqbwTmRzbkkx6vMujcRPLJWuxWd57q1S
+    address: str = Path(..., min_length=40, regex="^[a-zA-Z0-9_-]+$"), 
 ) -> None: 
 
     # get balance from ergo explorer api
@@ -135,26 +135,12 @@ async def get_asset_balance_from_address(
     for token in balance['confirmed']['tokens']:
         token['price'] = 0.0
         # if token['name'] == 'SigUSD': # TokenId: 22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9
-        if token['tokenId'] == '22c6cc341518f4971e66bd118d601004053443ed3f91f50632d79936b90712e9': 
+        if token['tokenId'] == '03faf2cb329f2e90d6d23b58d91bbb6c046aa143261cc21f52fbe2824bfcbf04': 
             price = (await get_asset_current_price('SigUSD'))['price']
-            wallet_assets['SigUSD'] = {
-                "blockchain": "ergo",
-                "balance": token['amount'], # satoshis/kushtis
-                "unconfirmed": 0.0, # may not be available for all blockchains
-                "tokens": None, # array
-                "price": price,
-            }
             token['price'] = price
-        # if token['name'] == 'SigRSV': # TokenId: 5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393
-        if token['tokenId'] == '5c6d8c6e7769f7af6e5474efed0c9909653af9ea1290f96dc08dc38a0c493393':
+        # if token['name'] == 'SigRSV': # TokenId: 003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0
+        if token['tokenId'] == '003bd19d0187117f130b62e1bcab0939929ff5c7709f843c5c4dd158949285d0':
             price = (await get_asset_current_price('SigRSV'))['price']
-            wallet_assets['SigRSV'] = {
-                "blockchain": "ergo",
-                "balance": token['amount'], # satoshis/kushtis
-                "unconfirmed": 0.0, # may not be available for all blockchains
-                "tokens": None, # array
-                "price": price,
-            }
             token['price'] = price
         tokens.append(token)
 
@@ -192,7 +178,7 @@ async def get_asset_current_price(
         res = requests.get(ergo_watch_api).json()
         if res:
             if coin == 'sigusd':
-                price = 1/(res['peg_rate_nano']/nerg2erg)
+                price = 1/(res['peg_rate_nano']/nerg2erg)/10.0
             else:        
                 circ_sigusd_cents = res['circ_sigusd']/100.0 # given in cents
                 peg_rate_nano = res['peg_rate_nano'] # also SigUSD

@@ -8,5 +8,6 @@ const GlassContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  height: '100%',
 }));
 export default GlassContainer;

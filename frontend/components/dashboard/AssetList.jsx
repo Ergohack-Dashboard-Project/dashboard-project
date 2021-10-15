@@ -11,11 +11,11 @@ import AssetItem from './AssetItem';
   { token: 'XRP', name: 'XRP', amount: 200, amountUSD: '430' },
 ]; */
 
-const AssetList = ({ assets }) => {
+const AssetList = ({ assets, title }) => {
   return (
     <Container>
       <Typography align='center' variant='h4'>
-        Assets
+        {title}
       </Typography>
 
       {assets.map((asset) => {

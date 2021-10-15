@@ -1,23 +1,23 @@
 import { Divider, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import makeGlassBg from 'styles/makeGlassStyle';
 
 const StyledAsset = styled('div')(({ theme }) => ({
   width: '100%',
   display: 'flex',
   alignItems: 'center',
   marginTop: theme.spacing(2),
-  marginBottom: theme.spacing(2),
-  padding: theme.spacing(2),
-  borderRadius: '10px',
-  justifyContent: 'space-between',
-  backgroundColor: `rgba( 255, 255, 255, 0.04)`,
+  paddingBottom: theme.spacing(1),
+  // marginBottom: theme.spacing(2),
+  // padding: theme.spacing(1),
+  // borderRadius: '10px',
+  // justifyContent: 'space-between',
+  // backgroundColor: `rgba( 255, 255, 255, 0.04)`,
 }));
 
 const AssetIcon = styled('img')(({ theme }) => ({
   width: '10%',
   height: 'auto',
-  borderRadius: '10px',
+  borderRadius: '0',
 }));
 
 const AssetNameContainer = styled('div')(({ theme }) => ({
@@ -38,10 +38,10 @@ const AssetAmountContainer = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const AssetItem = ({ asset, stableDenominator = 'SigUSD' }) => {
+const AssetItem = ({ asset, stableDenominator = 'USD' }) => {
   return (
-    <StyledAsset>
-      <AssetIcon src={asset?.tokenImageURL ?? '/tokenplaceholder.png'} />
+    <StyledAsset className='asset'>
+      <AssetIcon src={asset?.r9 ?? '/tokenplaceholder.png'} />
       <AssetNameContainer>
         <Typography>{asset.token}</Typography>
         <Typography variant='caption'>{asset.name}</Typography>

@@ -4,143 +4,11 @@ import { Grid, Typography, TextField, Box, Button } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { VictoryArea, VictoryContainer, VictoryPie } from 'victory';
 import axios from 'axios';
-import { useAuth } from 'src/auth';
-
-const rawData = 
-{
-  "address": "9fPRvaMYzBPotu6NGvZn4A6N4J2jDmRGs4Zwc9UhFFeSXgRJ8pS",
-  "balance": {
-    "ERG": {
-      "blockchain": "ergo",
-      "balance": 2.072445086,
-      "unconfirmed": 0,
-      "tokens": [
-        {
-          "tokenId": "003bd19d018711",
-          "amount": 115215,
-          "decimals": 0,
-          "name": "SigRSV",
-          "price": 0.00900232725612
-        },
-
-        {
-          "tokenId": "003bd19d0187117f130b62e1bca2234439929ff5c7709f843c5c4",
-          "amount": 163221,
-          "decimals": 0,
-          "name": "Tulip",
-          "price": 0.00005
-        },
-        {
-          "tokenId": "003bd19d0187117ff5c7709f843c5c4dd158949285d0",
-          "amount": 17432,
-          "decimals": 0,
-          "name": "Kushti",
-          "price": 0.3
-        },
-        {
-          "tokenId": "003bd19d0187117f13123bcab0939929ff5c7709f843c5c40",
-          "amount": 675,
-          "decimals": 0,
-          "name": "ErDoge",
-          "price": 0.01
-        },
-        {
-          "tokenId": "003117f130b62e3bcab09392354f549285d0",
-          "amount": 2456,
-          "decimals": 0,
-          "name": "Token1",
-          "price": 1
-        },
-        {
-          "tokenId": "003bd19d08949285d0",
-          "amount": 32521,
-          "decimals": 0,
-          "name": "TwoToken",
-          "price": 0.01
-        },
-        {
-          "tokenId": "003bd19d0187dd158949285d0",
-          "amount": 67,
-          "decimals": 0,
-          "name": "Hello",
-          "price": 12
-        },
-        {
-          "tokenId": "003bd19d111110187117f13123bcab0939929ff5c7709f843c5c40",
-          "amount": 675,
-          "decimals": 0,
-          "name": "another",
-          "price": 0.01
-        },
-        {
-          "tokenId": "0111103117f130b62e3bcab09392354f549285d0",
-          "amount": 2456,
-          "decimals": 0,
-          "name": "testtoken",
-          "price": 1
-        },
-        {
-          "tokenId": "003bd19d089411119285d0",
-          "amount": 32521,
-          "decimals": 0,
-          "name": "three",
-          "price": 0.01
-        },
-        {
-          "tokenId": "003bd19d0187dd1589492851111d0",
-          "amount": 67,
-          "decimals": 0,
-          "name": "four",
-          "price": 12
-        }
-      ],
-      "price": 10.3
-    }
-  }
-};
-/* 
-const rawData = 
-{
-  "address": "9fPRvaMYzBPotu6NGvZn4A6N4J2jDmRGs4Zwc9UhFFeSXgRJ8pS",
-  "balance": {
-    "ERG": {
-      "blockchain": "ergo",
-      "balance": 0.44,
-      "unconfirmed": 0,
-      "tokens": [
-        {
-          "tokenId": "003bd19d0187117f130b654b0939929ff5c7709f843c5c4dd158949285d0",
-          "amount": 468060,
-          "decimals": 0,
-          "name": "SigRSV",
-          "price": 0.000994344209289505
-        },
-        {
-          "tokenId": "003bd19d0187117f130b62e1bca2234439929ff5c7709f843c5c4dd158949285d0",
-          "amount": 211,
-          "decimals": 0,
-          "name": "SigUSD",
-          "price": 0.9782067949315545
-        },
-      ],
-      "price": 10.3
-    }
-  }
-}; */
-
-const historicData = [
-{ x: 1, y: 2 },
-{ x: 2, y: 3 },
-{ x: 3, y: 5 },
-{ x: 4, y: 4 },
-{ x: 5, y: 6}
-];
-
+import { useAuth } from 'src/auth'; 
 
 let imgNftList = [];
 let audNftList = [];
 let newAssetList = [];
-
 
 const wantedHoldingData = tokenDataArray(rawData);
 
@@ -220,7 +88,7 @@ const Dashboard = () => {
                 ch: data2.map(token => token.creationHeight),
                 description: data2.map(token => toUtf8String(token.additionalRegisters.R5).substr(2)),
                 r7: data2.map(token => token.additionalRegisters.R7),
-                r9: data2[0].additionalRegisters?.R9 ? resolveIpfs(toUtf8String(data2[0].additionalRegisters?.R9).substr(2)) : undefined,
+                r9: data2.map(token => resolveIpfs(toUtf8String(token.additionalRegisters.R9).substr(2))),
                 r5: data2.map(token => toUtf8String(token.additionalRegisters.R5).substr(2)),
                 ext: data2.map(token => toUtf8String(token.additionalRegisters.R9).substr(2).slice(-4)),
                 token: initialAssetList[i].token,
@@ -229,7 +97,7 @@ const Dashboard = () => {
                 amountUSD: initialAssetList[i].amountUSD ? initialAssetList[i].amountUSD : ''
               }
 
-              console.log(tokenObject.r9);
+              console.log(data2);
               
               // if audio NFT
               if (tokenObject.ext == '.mp3' || tokenObject.ext == '.ogg' || tokenObject.ext == '.wma' || tokenObject.ext == '.wav' || tokenObject.ext == '.aac' || tokenObject.ext == 'aiff' || tokenObject.r7 == '0e020102'){
@@ -248,7 +116,7 @@ const Dashboard = () => {
         }
       };
 
-      
+      console.log(imgNftList);
 
       setAssetList(newAssetList);
 
@@ -292,48 +160,6 @@ const Dashboard = () => {
 
       <Grid container spacing={1} alignItems="stretch" sx={{ pt: 4 }}>
 
-          <Grid item xs={12} md={6}>
-            <GlassContainer>
-              <Typography variant='h4'>Wallet Holdings</Typography>
-              <VictoryPie
-                id='victory-pie-chart'
-                innerRadius={100}
-                padAngle={2}
-                data={holdingData}
-                colorScale='cool'
-                style={{ labels: { fill: 'white' } }}
-                containerComponent={
-                  <VictoryContainer
-                    id='victory-pie-chart-container'
-                    style={{
-                      touchAction: 'auto',
-                    }}
-                  />
-                }
-                animate={{ easing: 'exp' }}
-              />
-            </GlassContainer>
-          </Grid>
-          
-          
-          <Grid item xs={12} md={6}>
-            <GlassContainer>
-              <Typography variant='h4'>Portfolio Hisory</Typography>
-              <VictoryArea
-                id='victory-area-chart'
-                style={{ data: { fill: "rgb(57, 186, 181)" } }}
-                data={historicData}
-                containerComponent={
-                  <VictoryContainer
-                    id='victory-area-chart-container'
-                    style={{
-                      touchAction: 'auto',
-                    }}
-                  />
-                }
-              />
-            </GlassContainer>
-          </Grid>
 
           <Grid item xs={12} md={4}>
           <GlassContainer>

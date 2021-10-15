@@ -5,40 +5,41 @@ import { List, ListItem, Box } from '@mui/material';
 import { styled } from '@mui/system';
 
 const BackgroundContainer = styled('div')(({ theme }) => ({
-  zIndex: -1,
+  zIndex: '-100',
+  
+  pointerEvents: 'none'
 }));
 
 const BackgroundSVG = styled('svg')(({ theme }) => ({
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  marginLeft: '-24rem',
   width: '800px',
   height: '264px',
+  position: 'absolute',
+  bottom: '0',
+  left: '-400px',
 }));
 
 const Footer = () => {
   return (
     <>
-            {/* Footer illustration */}
-            <BackgroundContainer aria-hidden="true">
-                <BackgroundSVG fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="400" cy="400" r="400" fill="url(#footerglow_paint0_radial)" fillOpacity=".4" />
-                    <defs>
-                        <radialGradient id="footerglow_paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(90 0 400) scale(315.089)">
-                            <stop stopColor="#3ABAB4" />
-                            <stop offset="1" stopColor="#3ABAB4" stopOpacity=".01" />
-                        </radialGradient>
-                    </defs>
-                </BackgroundSVG>
-            </BackgroundContainer>
+      {/* Footer illustration */}
+      <BackgroundContainer aria-hidden="true" variant='inherit'>
+          <BackgroundSVG fill="none" xmlns="http://www.w3.org/2000/svg" opacity="0.4">
+              <circle cx="400" cy="400" r="400" fill="url(#footerglow_paint0_radial)" fillOpacity=".4" />
+              <defs>
+                  <radialGradient id="footerglow_paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(90 0 400) scale(315.089)">
+                      <stop stopColor="#3ABAB4" />
+                      <stop offset="1" stopColor="#3ABAB4" stopOpacity=".01" />
+                  </radialGradient>
+              </defs>
+          </BackgroundSVG>
+      </BackgroundContainer>
 
-      <Grid container spacing={1} sx={{ pt: 10, justifyContent: 'space-between' }}>
+      <Grid container spacing={1} sx={{ justifyContent: 'space-between' }}>
         <Grid item xs={12} md={4}>
           
         </Grid>
         <Grid item xs={6} md={2}>
-          <Typography sx={titleStyles}>COMPANY</Typography>
+          <Typography variant='inherit' sx={titleStyles}>COMPANY</Typography>
           <List>
             <ListItem disableGutters sx={listItemStyles}>
               <Link activeClassName='active' href='/' sx={linkStyles}>
@@ -63,7 +64,7 @@ const Footer = () => {
           </List>
         </Grid>
         <Grid item xs={6} md={2}>
-          <Typography sx={titleStyles}>SUPPORT</Typography>
+          <Typography variant='inherit' sx={titleStyles}>SUPPORT</Typography>
           <List>
             <ListItem disableGutters sx={listItemStyles}>
               <Link activeClassName='active' href='/' sx={linkStyles}>
@@ -88,7 +89,7 @@ const Footer = () => {
           </List>
         </Grid>
         <Grid item xs={6} md={2}>
-          <Typography sx={titleStyles}>SOCIAL</Typography>
+          <Typography variant='inherit' sx={titleStyles}>SOCIAL</Typography>
           <List>
             <ListItem disableGutters sx={listItemStyles}>
               <Link activeClassName='active' href='/' sx={linkStyles}>
@@ -118,7 +119,7 @@ const Footer = () => {
           </List>
         </Grid>
         <Grid item xs={6} md={2}>
-          <Typography sx={titleStyles}>ERGO RESOURCES</Typography>
+          <Typography variant='inherit' sx={titleStyles}>ERGO RESOURCES</Typography>
           <List>
             <ListItem disableGutters sx={listItemStyles}>
               <Link activeClassName='active' href='/' sx={linkStyles}>
@@ -146,7 +147,7 @@ const Footer = () => {
 
       <Grid container spacing={1} sx={bottomStyles}>
         <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
-          <Typography sx={textStyles}>© 2021 ErgoPad. All rights reserved.</Typography>
+          <Typography variant='inherit' sx={textStyles}>© 2021 ErgoPad. All rights reserved.</Typography>
         </Grid>
         <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'center' } }}>
           <Link activeClassName='active' href='/' sx={linkStyles}>
@@ -158,7 +159,7 @@ const Footer = () => {
           </Link>
         </Grid>
         <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
-          <Typography sx={textStyles}>Social</Typography>
+          <Typography variant='inherit' sx={textStyles}>Social</Typography>
         </Grid>
       </Grid>
     </>
@@ -167,15 +168,15 @@ const Footer = () => {
 
 const titleStyles = {
   '& span': {
-    color: (theme) => theme.palette.primary.main,
+    color: (theme) => theme.palette.primary.primary,
   },
   fontWeight: 'normal',
-  fontSize: '0.92rem',
+  fontSize: 14,
 };
 
 const textStyles = {
   color: (theme) => theme.palette.text.secondary,
-  fontSize: '0.92rem',
+  fontSize: 14,
 };
 
 const linkStyles = {
@@ -184,17 +185,17 @@ const linkStyles = {
   '&:hover': {
     textDecoration: 'underline',
   },
-  fontSize: '0.92rem',
+  fontSize: 14,
 };
 
 const listItemStyles = {
-  lineHeight: '0.51rem',
-  fontSize: '0.92rem',
+  lineHeight: 0.7,
+  fontSize: 14,
 };
 
 const bottomStyles = {
   pt: 4,
-  pb: 4,
+  // fontSize: 14,
   display: 'flex',
   justifyContent: {
     xs: 'center',

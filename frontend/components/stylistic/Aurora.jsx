@@ -57,7 +57,7 @@ const Aurora = () => {
       exit='hidden'
       as={motion.svg}
       width='100vw'
-      height='100vh'
+      height='80vh'
       viewBox='0 0 372 483'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'

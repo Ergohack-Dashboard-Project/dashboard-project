@@ -9,6 +9,7 @@ import Header from '@components/Header';
 import Footer from '@components/Footer';
 import BottomNav from '@components/navigation/BottomNav';
 import Aurora from '@components/stylistic/Aurora';
+import Gradients from '@components/stylistic/Gradients';
 import makeStyledScrollbar from 'styles/makeStyledScrollbar';
 import pageTransitions from './pageTransitions';
 import { useAuth } from 'src/auth';
@@ -81,23 +82,23 @@ const Layout = ({ children }) => {
           exit='hidden'
         >
 
-      <AnimatePresence exitBeforeEnter>
+      {/* <AnimatePresence exitBeforeEnter>
         <Aurora key={router.route} />
-      </AnimatePresence>
+      </AnimatePresence> */}
+
+      <Box maxWidth='lg' sx={{ position: 'relative', mx: 'auto', height: '0', pointerEvents: 'none', zIndex: '-100' }} aria-hidden="true">
+        <Gradients />
+      </Box>
 
       <Container maxWidth='lg'>
         <Header />
       </Container>
-
-      
-        {/* Page transition animations  */}
-          <Container maxWidth='lg' sx={{ minHeight: '80vh' }}>
-            {children}
-          </Container>
-          <Container maxWidth='lg' sx={{ position: 'relative' }}>
-            <Footer />
-          </Container>
-
+      <Container maxWidth='lg' sx={{ minHeight: '80vh' }}>
+        {children}
+      </Container>
+      <Container maxWidth='lg' sx={{ position: 'relative', pt: theme.spacing(6), pb: theme.spacing(8) }}>
+        <Footer />
+      </Container>
       
       </PageWrapper>
       {isMobile && <BottomNav />}
