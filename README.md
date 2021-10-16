@@ -18,4 +18,4 @@ Now, to initiate frontend, you need to have NPM installed in your dev enviroment
 
 You can now change anything in the frontend folder and it will automatically refresh the website for you. 
 
-To make changes to backend, it's a good idea to reset the docker with `ctrl-C` if you're following the docker logs, or `docker-compose stop` in a fresh terminal. Theen run `docker-compose up` to start it again. 
+To make changes to backend, it's a good idea to reset the docker with `ctrl-C` if you're following the docker logs, or `docker-compose stop` in a fresh terminal. Then run `docker-compose up` to start it again. 
