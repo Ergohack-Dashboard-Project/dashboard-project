@@ -73,7 +73,7 @@ async def get_all_assets(
     profiles_repo: ProfilesRepository = Depends(get_repository(ProfilesRepository)),
 ) -> None:
     
-    # Final balance man contain multiple wallets
+    # Final balance may contain multiple wallets
     assets = {}
 
     profile = await profiles_repo.get_profile_by_username(username=username)
