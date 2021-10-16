@@ -1,6 +1,3 @@
 node_modules
 .next
 .vscode
-backend/.env.template
-backend/Dockerfile
-docker-compose.yml
