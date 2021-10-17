@@ -9,6 +9,14 @@ from app.models.user import UserInDB, UserPublic
 from app.models.profile import ProfileInDB, ProfilePublic
 from app.db.repositories.profiles import ProfilesRepository
 
+from starlette.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_404_NOT_FOUND,
+    HTTP_422_UNPROCESSABLE_ENTITY,
+)
 
 pytestmark = pytest.mark.asyncio
 
